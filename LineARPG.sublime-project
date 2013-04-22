@@ -1,0 +1,27 @@
+{
+	"folders":
+	[
+		{
+			"path": "./"
+		}
+	],
+
+	"build_systems":
+	[
+		{
+			"name": "Scala (Project Specific)",
+			"cmd": ["scalac","-d","bin/","src/*.scala"],
+			"file_regex": "^\\[error\\] ([.a-z_A-Z0-9/-]+[.]scala):([0-9]+):",
+			"working_dir": "${project_path}",
+			"selector": "source.scala",
+
+			"variants":
+			[
+				{
+					"name": "Run",
+					"cmd": ["java","bin/fridefors_peng/linearpg/Main.class"]
+				}
+			]
+		}
+	]
+}

@@ -1,23 +1,22 @@
 LineARPG - Linear ARPG, a love story of Castlevania and SMB
 ===========================================================
 
-Projektmål
+ProjektmÃ¥l
 -------
 * Tangentbordsbaserat ( -> joystick) ingen mus.
-* Multiplayer (Senare nätverk)
-* Procedurell level design till vis del (simpla mönster som kan uppkomma)
-* Mindre mål (lägre prioritet)
+* Multiplayer (Senare nÃ¤tverk)
+* Procedurell level design till viss del (simpla mÃ¶nster som kan uppkomma)
+* Mindre mÃ¥l (lÃ¤gre prioritet)
   - Bra interaktion mellan spelare
-  - varierande klasser (andra strategier och taktiker får tillämpas beroende på klass)
-  - 
+  - Varierande RPG klasser (andra strategier och taktiker fÃ¥r tillÃ¤mpas beroende pÃ¥ klass)
 
 Veckoplanering
 --------------
 
 V.17
-* Vi använder gammal motor från destructive scala. städa upp kod, välj ut klasser som behövs m.m. 
-* Ändra värden där det passar för spelkänsla.
-* Något objekt för interaktion (fiende, NPC, etc)
-* spelbart, körbart på tänkta maskiner.
+* Vi anvÃ¤nder gammal motor frÃ¥n destructive scala. stÃ¤da upp kod, vÃ¤lj ut klasser som behÃ¶vs m.m. 
+* Ã„ndra vÃ¤rden dÃ¤r det passar fÃ¶r spelkÃ¤nsla.
+* NÃ¥got objekt fÃ¶r interaktion (fiende, NPC, etc)
+* spelbart, kÃ¶rbart pÃ¥ tÃ¤nkta maskiner.
 
 V.18
