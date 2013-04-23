@@ -7,16 +7,16 @@ import org.newdawn.slick.geom.{Rectangle, Transform}
 import org.newdawn.slick.Graphics
 
 class SwordBullet(pos:Vector, ent:Entity) extends 
-  Bullet(pos + Vector(12 + 6*ent.hDir, 12), new Rectangle(0,0, 46*ent.hDir, 8), ent, true) {
-  
-  override def draw(g:Graphics) {
-    g.draw(body)
-  }
-  
-  override def update{
-    super.update
-  }
-  
-  var movement = Vector(0,0)
-  new Alarm(40, () => this.destroy)
+	Bullet(pos + Vector(12 + 6*ent.hDir, 12), new Rectangle(0,0, 46*ent.hDir, 8), ent, true) {
+
+	override def draw(g:Graphics) {
+		g.draw(body)
+	}
+
+	override def update{
+		super.update
+	}
+
+	var movement = Vector(0,0)
+	new Alarm(40, () => this.destroy)
 }

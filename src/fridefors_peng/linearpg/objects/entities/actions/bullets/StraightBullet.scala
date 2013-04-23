@@ -7,12 +7,10 @@ import org.newdawn.slick.geom.Circle
 import org.newdawn.slick.Graphics
 
 class StraightBullet(pos:Vector, velocity:Float, ent:Entity) extends Bullet(pos, new Circle(0,0, 10), ent) {
-  
-  var movement = Vector(velocity * ent.hDir, 0)
-  gravity  = 0.15f
-  
-  def draw(g:Graphics) {
-    g.draw(body)
-  }
+	var movement = Vector(velocity * ent.hDir, 0)
+	gravity  = 0.15f
 
+	def draw(g:Graphics) {
+		g.draw(body)
+	}
 }

@@ -1,5 +1,6 @@
 LineARPG - Linear ARPG, a love story of Castlevania and SMB
 ===========================================================
+Linear Platform Game, Line Action RPG
 
 Projektmål
 -------
