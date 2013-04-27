@@ -47,7 +47,7 @@ trait Physical extends Interactive {
 		
 		position+=movementModifier(movement*delta);
 		
-		exertForce(movement, delta)
+		exertForce(movement * delta)
 		
 		if (friction != 0) 
 			velocity -= friction*delta
@@ -59,12 +59,12 @@ trait Physical extends Interactive {
 	def velocity = movement.length
 	def velocity_= (vel:Double):Unit = movement.whoseLengthIs(vel);
 	
-	def exertForce(force:Vector , dt : Int) {
+	def exertForce(force:Vector) {
 		if(solid && force != NullVector){
-			val objs = allPlaceMeetingList(position.x + force.x * dt, position.y + force.y * dt, Entity list)
+			val objs = allPlaceMeetingList(position.x + force.x, position.y + force.y, Entity list)
 			objs foreach {(o) =>
 				o.relativeObject = Some(this)
-				o.position += force * dt
+				o.position += force
 			}
 		}
 	}
