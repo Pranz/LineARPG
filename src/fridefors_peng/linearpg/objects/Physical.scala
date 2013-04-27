@@ -21,7 +21,7 @@ trait Physical extends Interactive {
 	(Physical list) += this
 	
 	var movement:Vector
-	var accerelation:Vector
+	var acceleration:Vector
 	var gravity:Float
 	var friction:Double = 0
 	
@@ -42,12 +42,12 @@ trait Physical extends Interactive {
 			movement += prvRelativeObject.movement + (-relativeObject.movement)
 		}
 		//TODO: This delta code makes it feel a bit weird, is it correctly calculated? Try 10 FPS and compare to 60 FPS
-		movement += V(0, gravity)*delta
-		movement += accerelation*delta
+		movement += V(0, gravity) * delta
+		movement += acceleration * delta
 		
 		position+=movementModifier(movement*delta);
 		
-		exertForce(movement)
+		exertForce(movement, delta)
 		
 		if (friction != 0) 
 			velocity -= friction*delta
@@ -59,12 +59,12 @@ trait Physical extends Interactive {
 	def velocity = movement.length
 	def velocity_= (vel:Double):Unit = movement.whoseLengthIs(vel);
 	
-	def exertForce(force:Vector) {
+	def exertForce(force:Vector , dt : Int) {
 		if(solid && force != NullVector){
-			val objs = allPlaceMeetingList(position.x + force.x, position.y + force.y , Entity list)
+			val objs = allPlaceMeetingList(position.x + force.x * dt, position.y + force.y * dt, Entity list)
 			objs foreach {(o) =>
 				o.relativeObject = Some(this)
-				o.position += force
+				o.position += force * dt
 			}
 		}
 	}
@@ -81,6 +81,6 @@ object Physical{
 
 object DefaultPhysical extends Interactive(NullVector, new Rectangle(0,0,0,0)) with Physical {
 	var movement:Vector = Vector(0,0)
-	var accerelation:Vector = Vector(0,0)
+	var acceleration:Vector = Vector(0,0)
 	var gravity:Float = 0
 }

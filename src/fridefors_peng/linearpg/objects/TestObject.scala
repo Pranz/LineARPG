@@ -9,7 +9,7 @@ class TestObject( position:Vector, body:Shape) extends Interactive(position, bod
 	
 	var gravity      = .0f
 	var movement     = V(2, 1.8f)
-	var accerelation = V(0,0)
+	var acceleration = V(0,0)
 	friction         = 0.02
 
 	def draw(g: Graphics): Unit = {

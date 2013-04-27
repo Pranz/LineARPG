@@ -15,11 +15,9 @@ class LineARPG extends Game {
 		obj = new Humanoid(Vector(100, 250))
 		Main.input = container.getInput
 		new Block(Vector(100, 500), 50, 2)
-		//new TriangleBlock(Vector(300,500), 20, -20)
 		new Block(Vector(600, 200), 2, 50)
 		new PhysicalBlock(Vector(360, 450), 6, 2)
 		control = new EntityControl(obj, 0)
-		new Alarm(60, () => println("Hejhej"))
 	}
 
 	def update(container: GameContainer, delta_t: Int): Unit = {

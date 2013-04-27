@@ -17,7 +17,7 @@ abstract class Bullet(pos:Vector, bd:Shape, ent:Entity, relativePos:Boolean = fa
 		extends Interactive(pos, bd) with Physical with Renderable {
 	
 	var gravity = 0 : Float
-	var accerelation = NullVector : Vector
+	var acceleration = NullVector : Vector
 	val firstPos = ent.position
 	
 	var invulnerable_ents = ArrayBuffer(ent)

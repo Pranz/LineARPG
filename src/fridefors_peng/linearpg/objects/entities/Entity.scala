@@ -28,7 +28,7 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	val fAction = new Array[Option[Action]](10) map {_ => None : Option[Action]}
 	
 	var movement     = V(0, 0)
-	var accerelation = V(0, 0)
+	var acceleration = V(0, 0)
 	var gravity      = 0.001f
 	var moving       = false
 	var jumpPower:Float
@@ -103,40 +103,40 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		}
 	}
 	
-	def moveX(x:Float):Vector={
+	def moveX(x:Float) : Float={
 		if (x >= 1 || x <= -1){
 			if (collidesAny(position.x + x, position.y, true)) {
 				hspeed = 0
 				return moveX(x - math.signum(x))
 			}
-			else return V(x,0);
+			else return x;
 		}
 		else if(collidesAny(position.x + math.signum(x), position.y, true)){
 			hspeed = 0
-			return V(0,0);
+			return 0;
 		}
 		else
-			return V(x,0)
+			return x
 	}
 	
-	def moveY(y:Float):Vector={
+	def moveY(y:Float) : Float ={
 		if(y >= 1 || y <= -1){
 			if (collidesAny(position.x, position.y + y, true)){
 				vspeed = 0
 				return moveY(y - math.signum(y));
 			}
 			else
-				return V(0,y)
+				return y
 		}
 		else if(collidesAny(position.x, position.y + math.signum(y), true)){
 			vspeed = 0
-			return V(0,0)
+			return 0
 		}
 		else
-			return V(0,y)
+			return y
 	}
 	
-	override def movementModifier(dpos:Vector)=moveX(dpos.x)+moveY(dpos.y)
+	override def movementModifier(dpos:Vector) = V(moveX(dpos.x), moveY(dpos.y))
 }
 
 object Entity{
