@@ -36,4 +36,5 @@ abstract class ControllableBlock(pos:Vector, len:Int, wid:Int, val blockID:Int) 
 
 object ControllableBlock {
 	val list = collection.mutable.ArrayBuffer[ControllableBlock]()
+	def getBlocksWithID(id: Int) = list.filter(_.blockID == id)
 }

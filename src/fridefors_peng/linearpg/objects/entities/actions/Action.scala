@@ -3,6 +3,10 @@ package fridefors_peng.linearpg.objects.entities.actions
 import fridefors_peng.linearpg.objects.Alarm
 import fridefors_peng.linearpg.objects.entities.Entity
 
+/**
+ * abstract for any action.
+ */
+
 abstract class Action(ent:Entity) {
 	val name : String
 	

@@ -6,6 +6,13 @@ import org.newdawn.slick.{KeyListener, Input}
 import collection.mutable.ArrayBuffer
 import collection.immutable.HashMap
 
+/**
+ * Abstract class and object with a interface for user input.
+ * Adds itself as a keyListener to the main input.
+ * The object contains an enumeration for key values, along with a keyMap
+ * Any object of Control also contains a keyMap, according to it's PlayerID
+ */
+
 abstract class Control(playerID:Int) extends GameObject with KeyListener {
 	def handleKeys(input:Input):Unit
 	Main.input.addKeyListener(this)
@@ -29,6 +36,7 @@ object Control {
 		ACTION_5, ACTION_6, ACTION_7, ACTION_8, ACTION_9, ACTION_0 = Value
 	}
 	
+	//TODO: value of keyMap should be made external to a config file
 	val keyMap = HashMap[Int, HashMap[Key.Key, Int]](
 		0 -> HashMap(
 			Key.MOVE_LEFT  -> Input.KEY_LEFT,

@@ -16,7 +16,11 @@
 *.out
 *.app
 
+# Sublime Text Data
 *.sublime-workspace
+
+# Merge files
+*.orig
 
 bin/*
 lib/*

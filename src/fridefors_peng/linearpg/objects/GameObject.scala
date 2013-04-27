@@ -1,6 +1,10 @@
 package fridefors_peng.linearpg.objects
 import scala.collection.mutable.ArrayBuffer
 
+/**
+ * Any object that is a function of time is a gameObject.
+ * updates every frame.
+ */
 abstract class GameObject {
 	private var destroyed = false
 	(GameObject list) += this
