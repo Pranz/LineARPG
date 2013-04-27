@@ -5,40 +5,35 @@ import collection.mutable.ArrayBuffer
 import org.newdawn.slick.geom.Shape
 
 abstract class Interactive(var position:Vector, var body:Shape) extends GameObject {
-	var bodyOffset = Vector(0,0)
-	
 	(Interactive list) += this
+	
 	var previousPos = position
 	def deltaPos = position - previousPos
-	private def bodyCenter_ = position + bodyOffset
-	
-	private var sol = false
-	def solid:Boolean = sol
+		
+	private var isSolid = false
+	def solid:Boolean = isSolid
 	def solid_=(newIsSolid:Boolean):Unit = 
-		if (newIsSolid != solid)
-		{
-			if (newIsSolid){
-			Interactive.solids += this
-			}
-			else Interactive.solids -= this
-			sol = newIsSolid
+		if(newIsSolid != isSolid){
+			if(newIsSolid)
+				Interactive.solids += this
+			else
+				Interactive.solids -= this
+			isSolid = newIsSolid
 		}
-		else {}
 	
+	def bodyOffset=Vector(0,0)
 	
-	override def update {
-		body.setLocation(bodyCenter_.x, bodyCenter_.y)
+	override def update(delta:Int) {
+		body.setLocation(position.x+bodyOffset.x,position.y+bodyOffset.y)
 		previousPos = position
 	}
 	
-	def move(dpos:Vector) {
-		position += dpos
-	}
+	def movementModifier(dpos:Vector)=dpos;
 	
 	override def destroy {
 		super.destroy
 		(Interactive list) -= this
-		if (solid) Interactive.solids -= this
+		if(solid) Interactive.solids -= this
 	}
 	
 	//Long ass-collision code. 

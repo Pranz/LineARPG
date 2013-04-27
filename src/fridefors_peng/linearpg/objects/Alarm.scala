@@ -1,25 +1,27 @@
 package fridefors_peng.linearpg.objects
 
-class Alarm(frames:Int, f: () => Unit, loop:Boolean = false) extends GameObject {
+class Alarm(milliseconds:Int, f: () => Unit, loop:Boolean = false) extends GameObject {
 	
-	if(frames == 0){
+	if(milliseconds == 0){
 		execute
-	}else if (frames == -1){
+	}else if (milliseconds == -1){
 		destroy
 	}
 
 	var currentFrame = 1
 	
-	def update(){
-		if (currentFrame == frames) {
+	def update(delta:Int){
+		if(currentFrame >= milliseconds)
 			execute
-		}
-		else currentFrame += 1
+		else
+			currentFrame += delta
 	}
 	
 	def execute {
 		f()
-		if (loop) currentFrame = 0
-		else destroy
+		if(loop)
+			currentFrame = 0
+		else
+			destroy
 	}
 }

@@ -1,4 +1,5 @@
 package fridefors_peng.linearpg.objects
+import scala.collection.mutable.ArrayBuffer
 
 abstract class GameObject {
 	private var destroyed = false
@@ -11,9 +12,9 @@ abstract class GameObject {
 		}
 	}
 	
-	def update:Unit	
+	def update(delta_t:Int):Unit	
 }
 
 object GameObject{
-	val list: scala.collection.mutable.ArrayBuffer[GameObject] = scala.collection.mutable.ArrayBuffer()
+	val list: ArrayBuffer[GameObject] = ArrayBuffer()
 }

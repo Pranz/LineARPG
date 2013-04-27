@@ -10,7 +10,7 @@ abstract class Control(playerID:Int) extends GameObject with KeyListener {
 	def handleKeys(input:Input):Unit
 	Main.input.addKeyListener(this)
 
-	final def update {
+	override final def update(delta:Int) {
 		handleKeys(Main.input)
 	}
 

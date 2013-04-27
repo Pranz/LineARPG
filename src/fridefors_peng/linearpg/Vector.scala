@@ -19,6 +19,7 @@ case class Vector(x:Float, y:Float) {
 	def +(v:Vector):Vector = Vector(this.x + v.x, this.y + v.y)
 	def -(v:Vector):Vector = Vector(this.x - v.x, this.y - v.y)
 	def *(n:Float):Vector = Vector(this.x * n, this.y * n)
+	def /(n:Float):Vector = Vector(this.x / n, this.y / n)
 	def unary_- = Vector(-x, -y)
 	def toTuple = (x, y)
 	

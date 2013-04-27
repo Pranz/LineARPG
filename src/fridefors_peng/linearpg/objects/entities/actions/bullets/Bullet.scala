@@ -12,8 +12,8 @@ abstract class Bullet(pos:Vector, bd:Shape, ent:Entity, relativePos:Boolean = fa
 	var accerelation = NullVector : Vector
 	val firstPos = ent.position
 	
-	override def update {
-		super.update
+	override def update(delta:Int) {
+		super.update(delta)
 		if(relativePos){
 			position += Vector(ent.deltaPos.x, ent.deltaPos.y)
 		}

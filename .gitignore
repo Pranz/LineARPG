@@ -20,5 +20,6 @@
 
 bin/*
 lib/*
+.settings/*
 /lib
-./settings
+/.settings

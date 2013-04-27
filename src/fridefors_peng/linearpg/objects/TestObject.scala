@@ -16,7 +16,7 @@ class TestObject( position:Vector, body:Shape) extends Interactive(position, bod
 		g.draw(body)
 	}
 
-	override def update(): Unit = {
-		super.update
+	override def update(delta:Int): Unit = {
+		super.update(delta)
 	}
 }

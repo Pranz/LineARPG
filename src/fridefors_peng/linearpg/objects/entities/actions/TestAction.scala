@@ -2,10 +2,11 @@ package fridefors_peng.linearpg.objects.entities.actions
 
 import fridefors_peng.linearpg.objects.entities.Entity
 import fridefors_peng.linearpg.objects.entities.actions.bullets.StraightBullet
+import fridefors_peng.linearpg.objects.Alarm
 
 class TestAction(ent:Entity) extends SingleAction(ent) {
 	val name = "Best Action"
-
+		
 	val delay    = 0 : Int
 	val duration = 0 : Int
 
@@ -14,7 +15,7 @@ class TestAction(ent:Entity) extends SingleAction(ent) {
 	}
 
 	def action(): Unit = {
-		new StraightBullet(ent.position, 5, ent)
+		new StraightBullet(ent.position, 0.1f, ent)
 	}
 
 	def then(): Unit = {}

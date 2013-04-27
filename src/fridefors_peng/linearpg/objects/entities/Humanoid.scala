@@ -8,7 +8,7 @@ import fridefors_peng.linearpg.objects.entities.actions.{
 
 class Humanoid(pos:Vector) extends Entity(pos, new Rectangle(0,0,24,56)) {
 	val hp = 100 : Double
-	var jumpPower = 7f
+	var jumpPower = 0.4f
 	fAction(0) = Some(new TestAction (this))
 	fAction(1) = Some(new TestChargedAction(this))
 	fAction(2) = Some(new SwordAction(this))

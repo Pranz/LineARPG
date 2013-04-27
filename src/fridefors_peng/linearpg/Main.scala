@@ -15,8 +15,7 @@ object Main{
 	}
 	
 	def createAppGameContainer() : AppGameContainer = {
-		val
-		app = new AppGameContainer(new LineARPG(), 1024, 756, false);
+		val app = new AppGameContainer(new LineARPG(), 1024, 756, false);
 		app.setUpdateOnlyWhenVisible(false);
 		app.setTitle(TITLE);
 		app.setShowFPS(false);

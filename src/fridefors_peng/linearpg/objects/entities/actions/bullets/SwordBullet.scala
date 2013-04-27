@@ -13,8 +13,8 @@ class SwordBullet(pos:Vector, ent:Entity) extends
 		g.draw(body)
 	}
 
-	override def update{
-		super.update
+	override def update(delta:Int){
+		super.update(delta)
 	}
 
 	var movement = Vector(0,0)

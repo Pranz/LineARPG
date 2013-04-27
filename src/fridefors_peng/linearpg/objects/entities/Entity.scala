@@ -12,7 +12,7 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	
 	(Entity list) += this
 	
-	private val speedMods = ArrayBuffer[Float]()
+	private val speedMods = ArrayBuffer[Float]()//TODO: Check if we really need a List for this, multiplication and division would work fine
 	
 	private var airspdf = 0.1f
 	var airFricFactor  = 0f
@@ -27,12 +27,12 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	
 	var movement     = V(0, 0)
 	var accerelation = V(0, 0)
-	var gravity      = 0.25f
+	var gravity      = 0.001f
 	var moving       = false
 	var jumpPower:Float
 	var hDir         = 1
-	private var spd  = 0.6f
-	private var hfr  = 0.3f
+	private var spd  = 0.06f
+	private var hfr  = 0.05f
 
 	def hfriction = hfr * speedMod
 	def hfriction_=(value:Float):Unit = {
@@ -43,7 +43,7 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	
 	var speedMod = 1f //calculates for every update due to performance.
 	
-	var maxhspd   = 3f
+	var maxhspd   = 0.25f
 	def maxhSpeed:Float = {
 		if (onGround) speedMod * maxhspd
 		else speedMod * maxhspd * airSpeedFactor * 5
@@ -67,8 +67,8 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		g.draw(body)
 	}
 	
-	override def update {
-		super.update
+	override def update(delta:Int) {
+		super.update(delta)
 		applyHFriction
 		speedMod = speedMods.foldLeft(1.0f){_ * _}
 	}
@@ -81,18 +81,6 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		if(hfric != 0){
 			if (math.abs(hspeed) < hfric) hspeed = 0
 			else hspeed -= math.signum(hspeed) * hfric
-		}
-		else moving = false
-	}
-	
-	def applyVFriction {
-		val vfric = {
-			if (onGround) vfriction
-			else vfriction * airFricFactor
-		}
-		if(vfric != 0){
-			if (math.abs(hspeed) < vfric) hspeed = 0
-			else hspeed -= math.signum(hspeed) * vfric
 		}
 		else moving = false
 	}
@@ -116,54 +104,40 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		}
 	}
 	
-	def moveXtowardsOther(dir:Int, other:Interactive) {
-		if(!collidesOther(position.x + dir, position.y, other)){
-			position += V(dir,0)
-			moveXtowardsOther(dir, other)
-		}
-	}
-	
-	def moveYtowardsOther(dir:Int, other:Interactive) {
-		if(!collidesOther(position.x, position.y + dir, other)){
-			position += V(0,dir)
-			moveXtowardsOther(dir, other)
-		}
-	}
-	
-	def moveX(x:Float) {
-		if (math.abs(x) >= 1){
+	def moveX(x:Float):Vector={
+		if (x >= 1 || x <= -1){
 			if (collidesAny(position.x + x, position.y, true)) {
-				if(!collidesAny(position.x + Math.signum(x), position.y - 1, true)){
-					position += V(0,-2)
-				}
-				else hspeed = 0
-				
-				moveX(x - math.signum(x))
+				hspeed = 0
+				return moveX(x - math.signum(x))
 			}
-			else position += V(x,0)
+			else return V(x,0);
 		}
-		else if (!collidesAny(position.x + math.signum(x), position.y, true)) position += V(x,0)
-		else if(!collidesAny(position.x + Math.signum(x), position.y - 1, true)){
-					position -= V(0,2)
-				}
-		else hspeed = 0
+		else if(collidesAny(position.x + math.signum(x), position.y, true)){
+			hspeed = 0
+			return V(0,0);
+		}
+		else
+			return V(x,0)
 	}
 	
-	def moveY(y:Float) {
-		if (math.abs(y) >= 1){
+	def moveY(y:Float):Vector={
+		if(y >= 1 || y <= -1){
 			if (collidesAny(position.x, position.y + y, true)){
-				moveY(y - math.signum(y))
 				vspeed = 0
+				return moveY(y - math.signum(y));
 			}
-			else position += V(0,y)
+			else
+				return V(0,y)
 		}
-		else if (!collidesAny(position.x, position.y + math.signum(y), true)) position += V(0,y)
-		else vspeed = 0
+		else if(collidesAny(position.x, position.y + math.signum(y), true)){
+			vspeed = 0
+			return V(0,0)
+		}
+		else
+			return V(0,y)
 	}
 	
-	override def move(dpos:Vector):Unit = {
-		moveX(dpos.x); moveY(dpos.y)
-	}
+	override def movementModifier(dpos:Vector)=moveX(dpos.x)+moveY(dpos.y)
 }
 
 object Entity{
