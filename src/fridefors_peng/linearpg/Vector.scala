@@ -1,5 +1,8 @@
 package fridefors_peng.linearpg
 
+/**
+ * Mathematical object, a 2-dimensional vector. 
+ */
 case class Vector(x:Float, y:Float) {
 	def length = math sqrt(x * x + y * y)
 	def whoseLengthIs (newl:Double):Vector = {

@@ -4,6 +4,9 @@ import fridefors_peng.linearpg.{Vector, PolarVector}
 import collection.mutable.ArrayBuffer
 import org.newdawn.slick.geom.Shape
 
+/**
+ * Any object that has a position and a body
+ */
 abstract class Interactive(var position:Vector, var body:Shape) extends GameObject {
 	var bodyOffset = Vector(0,0)
 	
@@ -12,8 +15,8 @@ abstract class Interactive(var position:Vector, var body:Shape) extends GameObje
 	def deltaPos = position - previousPos
 	private def bodyCenter_ = position + bodyOffset
 	
-	private var sol = false
-	def solid:Boolean = sol
+	private var solid_prv = false
+	def solid:Boolean = solid_prv
 	def solid_=(newIsSolid:Boolean):Unit = 
 		if (newIsSolid != solid)
 		{
@@ -21,7 +24,7 @@ abstract class Interactive(var position:Vector, var body:Shape) extends GameObje
 			Interactive.solids += this
 			}
 			else Interactive.solids -= this
-			sol = newIsSolid
+			solid_prv = newIsSolid
 		}
 		else {}
 	

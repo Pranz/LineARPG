@@ -1,6 +1,10 @@
 package fridefors_peng.linearpg.objects
 import org.newdawn.slick.Graphics
 
+/**
+ * Simple trait. Any object that implements this must define a draw function, which takes a single slick.Graphics argument.
+ */
+
 trait Renderable extends GameObject {
 	(Renderable list) += this
 

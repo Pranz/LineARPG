@@ -5,11 +5,14 @@ import fridefors_peng.linearpg.objects.entities.Entity
 import fridefors_peng.linearpg.Main
 import fridefors_peng.linearpg.objects.Timer
 
-class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
+/**
+ * Controls any entity. General and thus final.
+ */
+
+final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	
 	var curAction = 0
-	val keyMap_ = keyMap.map(_ swap)
-	val actionCharge = new Timer(paused = true)
+	val reverseKeyMap = keyMap.map(_ swap)
 
 	def handleKeys(input: Input): Unit = {
 		if (input.isKeyDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Entity.LEFT)
@@ -20,17 +23,21 @@ class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 		}
 	}
 	
+	/*
+	 * 
+	 */
 	private var exp = 0
-	def expect(a:Int){
-		exp = a
+	def expect(actionID:Int){
+		exp = actionID
 	}
-	def expects(a:Int) =
-		a == exp
+	def expects(actionID:Int) =
+		actionID == exp
 	
 	def keyPressed(key:Int, keyChar:Char){
 		
-		val key_ = if(keyMap_.contains(key))
-			keyMap_(key)
+		//get Control.Key enumeration value derived from Input.KEY int value
+		val key_ = if(reverseKeyMap.contains(key))
+			reverseKeyMap(key)
 			else -1
 
 		key_ match {
@@ -38,7 +45,7 @@ class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 			case Control.Key.CROUCH => ent.addSpeedMod(0.5f)
 			case Control.Key.PERFORM_ACTION => {
 				ent.fAction(curAction) match {
-					case Some(action) => {if(action.ready) action.onClick; expect(curAction); actionCharge reset}
+					case Some(action) => {if(action.ready) action.onClick; expect(curAction);}
 					case None         => {}
 				}  
 			}
@@ -61,8 +68,8 @@ class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 		
 	}
 	def keyReleased(key:Int, keyChar:Char){
-		val key_ = if(keyMap_.contains(key))
-			keyMap_(key)
+		val key_ = if(reverseKeyMap.contains(key))
+			reverseKeyMap(key)
 			else -1
 		key_ match {
 			case Control.Key.CROUCH => ent.removeSpeedMod(0.5f)
@@ -73,7 +80,6 @@ class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 						case None         => {}
 					}
 				}
-				actionCharge stop
 			}
 			case _ => {}
 		}

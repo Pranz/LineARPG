@@ -7,12 +7,14 @@ import org.newdawn.slick.geom.Shape
 import org.newdawn.slick.Graphics
 import collection.mutable.ArrayBuffer
 
+/**
+ * The Entity class. This is any unit in the game world, and can be player or AI controlled.
+ * 
+ */
 abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) with Physical 
 		with Renderable{
 	
 	(Entity list) += this
-	
-	private val speedMods = ArrayBuffer[Float]()
 	
 	private var airspdf = 0.1f
 	var airFricFactor  = 0f
@@ -31,17 +33,15 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	var moving       = false
 	var jumpPower:Float
 	var hDir         = 1
-	private var spd  = 0.6f
-	private var hfr  = 0.3f
-
-	def hfriction = hfr * speedMod
+	private var speed_prv  = 0.6f
+	private var hfriction_prv  = 0.3f
+	
+	def hfriction = hfriction_prv * speedMod
 	def hfriction_=(value:Float):Unit = {
-		hfr = value
+		hfriction_prv = value
 	}
 	
-	var vfriction = 0
-	
-	var speedMod = 1f //calculates for every update due to performance.
+	private var speedMod = 1f //calculated every update due to performance. Init value
 	
 	var maxhspd   = 3f
 	def maxhSpeed:Float = {
@@ -49,18 +49,18 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		else speedMod * maxhspd * airSpeedFactor * 5
 	}
 	
-	def speed = speedMod * spd
+	def speed = speedMod * speed_prv
 	def speed_=(value:Float):Unit = {
-		spd = value
+		speed_prv = value
 	}
 	
 	def addSpeedMod(spd:Float, duration:Int = -1) {
-		speedMods += spd
-		if(duration != -1) new Alarm(duration, () => speedMods -= spd, false)
+		speedMod *= spd
+		new Alarm(duration, () => removeSpeedMod(spd))
 	}
 	
 	def removeSpeedMod(spd:Float){
-		speedMods -= spd
+		speedMod /= spd
 	}
 	
 	def draw(g:Graphics) {
@@ -70,7 +70,6 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	override def update {
 		super.update
 		applyHFriction
-		speedMod = speedMods.foldLeft(1.0f){_ * _}
 	}
 	
 	def applyHFriction {
@@ -81,18 +80,6 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		if(hfric != 0){
 			if (math.abs(hspeed) < hfric) hspeed = 0
 			else hspeed -= math.signum(hspeed) * hfric
-		}
-		else moving = false
-	}
-	
-	def applyVFriction {
-		val vfric = {
-			if (onGround) vfriction
-			else vfriction * airFricFactor
-		}
-		if(vfric != 0){
-			if (math.abs(hspeed) < vfric) hspeed = 0
-			else hspeed -= math.signum(hspeed) * vfric
 		}
 		else moving = false
 	}

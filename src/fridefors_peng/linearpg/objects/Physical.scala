@@ -5,6 +5,11 @@ import collection.mutable.ArrayBuffer
 import org.newdawn.slick.geom.Rectangle
 import fridefors_peng.linearpg.objects.entities.Entity
 
+/**
+ * Any object that is affected by gravity and has velocity and acceleration.
+ * Physical solids also affect other physical objects movements.
+ */
+
 trait Physical extends Interactive {
 	val V = Vector
 	
