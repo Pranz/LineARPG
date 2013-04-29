@@ -1,4 +1,3 @@
-#Wed Apr 24 00:42:51 CEST 2013
 Xcheck-null=false
 Xcheckinit=false
 Xdisable-assertions=false
@@ -53,6 +52,7 @@ organizeimports.expandcollapse=expand
 organizeimports.groups=java$scala$org$com
 organizeimports.scalapackage=false
 organizeimports.wildcards=scalaz$scalaz.Scalaz
+scala.compiler.additionalParams=-feature -deprecation -language\:implicitConversions
 scala.compiler.useProjectSettings=false
 stopBuildOnError=false
 syntaxColouring.bracket.backgroundColourEnabled=false

@@ -3,20 +3,24 @@ import scala.collection.mutable.ArrayBuffer
 
 /**
  * Any object that is a function of time is a gameObject.
- * updates every frame.
+ * Updates every frame.
  */
-abstract class GameObject {
+trait GameObject {
 	private var destroyed = false
-	(GameObject list) += this
+	GameObject.list += this
 	
 	def destroy{
 		if (!destroyed){
-			(GameObject list) -= this
+			GameObject.list -= this
 			destroyed = true
 		}
 	}
 	
-	def update(delta_t:Int):Unit	
+
+	/**
+	 * @param delta Time since last update in milliseconds (ms)
+	 */
+	def update(delta:Int):Unit	
 }
 
 object GameObject{

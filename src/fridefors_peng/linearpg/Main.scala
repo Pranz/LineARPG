@@ -1,33 +1,24 @@
 package fridefors_peng.linearpg
+import lolirofle.gl2dlib.graphics.text.DefaultFont
+import lolirofle.gl2dlib.Game
+import lolirofle.gl2dlib.GameHandler
 
-import org.newdawn.slick.{Input, AppGameContainer, Graphics}
-
-object Main{
-	
-	val TITLE = "LineARPG"
+object Main{	
 	val TILE_SIZE = 16
-	var input:Input = null
+	var game:Game=null
 	
-	def main(args: Array[String]) {
-		val container = createAppGameContainer()
-		container start
-
+	def main(args: Array[String]){
+		game=new LineARPGame()
+		
+		GameHandler.init(game,"Test",displayWidth=1024,displayHeight=756);
+		game.title="LineARPG"
+		game.FPS=60
+		GameHandler.start();
 	}
 	
-	def createAppGameContainer() : AppGameContainer = {
-		val app = new AppGameContainer(new LineARPG(), 1024, 756, false);
-		app.setUpdateOnlyWhenVisible(false);
-		app.setTitle(TITLE);
-		app.setShowFPS(false);
-		app.setTargetFrameRate(60);
-		return app;
-	}
-	
-	var Camera = Vector(0,0)
-	
-	def drawList(list:List[String], g:Graphics) {
-		for (i <- 0 to list.size - 1){
-			g.drawString(list(i), 0, 16*i)
+	def drawList(x:Float,y:Float,list:List[String]) {
+		for (i <- 0 to list.size-1){
+			DefaultFont.font.drawString(x,y+16*i,list(i))
 		}
 	}
 }

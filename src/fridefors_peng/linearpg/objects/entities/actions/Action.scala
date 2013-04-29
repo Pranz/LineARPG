@@ -16,7 +16,7 @@ abstract class Action(ent:Entity) {
 	
 	protected def preAction:Unit
 	protected def action:Unit
-	protected def then:Unit
+	protected def thenAction:Unit
 	
 	protected final def execute {
 		ready = false
@@ -24,7 +24,7 @@ abstract class Action(ent:Entity) {
 		new Alarm(delay,() => {
 			action
 			new Alarm(duration, () => {
-				then
+				thenAction
 				ready = true
 			})
 		})

@@ -1,10 +1,9 @@
 package fridefors_peng.linearpg.input
 
-import fridefors_peng.linearpg.Main
 import fridefors_peng.linearpg.objects.GameObject
-import org.newdawn.slick.{KeyListener, Input}
 import collection.mutable.ArrayBuffer
 import collection.immutable.HashMap
+import org.lwjgl.input.Keyboard
 
 /**
  * Abstract class and object with a interface for user input.
@@ -13,20 +12,8 @@ import collection.immutable.HashMap
  * Any object of Control also contains a keyMap, according to it's PlayerID
  */
 
-abstract class Control(playerID:Int) extends GameObject with KeyListener {
-	def handleKeys(input:Input):Unit
-	Main.input.addKeyListener(this)
-
-	override final def update(delta:Int) {
-		handleKeys(Main.input)
-	}
-
+abstract class Control(playerID:Int) extends GameObject{
 	def keyMap = Control.keyMap(playerID)
-
-	def isAcceptingInput = true
-	def setInput(input:Input):Unit = {} 
-	def inputEnded:Unit = {}
-	def inputStarted:Unit = {}
 }
 
 object Control {
@@ -39,23 +26,23 @@ object Control {
 	//TODO: value of keyMap should be made external to a config file
 	val keyMap = HashMap[Int, HashMap[Key.Key, Int]](
 		0 -> HashMap(
-			Key.MOVE_LEFT  -> Input.KEY_LEFT,
-			Key.MOVE_RIGHT -> Input.KEY_RIGHT,
-			Key.MOVE_DOWN  -> Input.KEY_DOWN,
-			Key.MOVE_UP    -> Input.KEY_UP,
-			Key.JUMP       -> Input.KEY_Z,
-			Key.PERFORM_ACTION -> Input.KEY_X,
-			Key.CROUCH     -> Input.KEY_LSHIFT,
-			Key.ACTION_1   -> Input.KEY_1,
-			Key.ACTION_2   -> Input.KEY_2,
-			Key.ACTION_3   -> Input.KEY_3,
-			Key.ACTION_4   -> Input.KEY_4,
-			Key.ACTION_5   -> Input.KEY_5,
-			Key.ACTION_6   -> Input.KEY_6,
-			Key.ACTION_7   -> Input.KEY_7,
-			Key.ACTION_8   -> Input.KEY_8,
-			Key.ACTION_9   -> Input.KEY_9,
-			Key.ACTION_0   -> Input.KEY_0
+			Key.MOVE_LEFT  -> Keyboard.KEY_LEFT,
+			Key.MOVE_RIGHT -> Keyboard.KEY_RIGHT,
+			Key.MOVE_DOWN  -> Keyboard.KEY_DOWN,
+			Key.MOVE_UP    -> Keyboard.KEY_UP,
+			Key.JUMP       -> Keyboard.KEY_Z,
+			Key.PERFORM_ACTION -> Keyboard.KEY_X,
+			Key.CROUCH     -> Keyboard.KEY_LSHIFT,
+			Key.ACTION_1   -> Keyboard.KEY_1,
+			Key.ACTION_2   -> Keyboard.KEY_2,
+			Key.ACTION_3   -> Keyboard.KEY_3,
+			Key.ACTION_4   -> Keyboard.KEY_4,
+			Key.ACTION_5   -> Keyboard.KEY_5,
+			Key.ACTION_6   -> Keyboard.KEY_6,
+			Key.ACTION_7   -> Keyboard.KEY_7,
+			Key.ACTION_8   -> Keyboard.KEY_8,
+			Key.ACTION_9   -> Keyboard.KEY_9,
+			Key.ACTION_0   -> Keyboard.KEY_0
 		)
 	)
 }

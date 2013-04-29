@@ -2,18 +2,16 @@ package fridefors_peng.linearpg.objects
 
 import fridefors_peng.linearpg.{Vector, PolarVector}
 import collection.mutable.ArrayBuffer
-import org.newdawn.slick.geom.Shape
+import lolirofle.gl2dlib.geom.Shape
 
 /**
  * Any object that has a position and a body
  */
-abstract class Interactive(var position:Vector, var body:Shape) extends GameObject {
-	var bodyOffset = Vector(0,0)
+abstract class Interactive(var position:Vector,var body:Shape) extends GameObject {
 	
-	(Interactive list) += this
+	Interactive.list += this
 	var previousPos = position
 	def deltaPos = position - previousPos
-	private def bodyCenter_ = position + bodyOffset
 	
 	private var solid_prv = false
 	def solid:Boolean = solid_prv
@@ -29,7 +27,6 @@ abstract class Interactive(var position:Vector, var body:Shape) extends GameObje
 	
 	
 	override def update(delta:Int) {
-		body.setLocation(position.x+bodyOffset.x,position.y+bodyOffset.y)
 		previousPos = position
 	}
 	
@@ -37,56 +34,52 @@ abstract class Interactive(var position:Vector, var body:Shape) extends GameObje
 	
 	override def destroy {
 		super.destroy
-		(Interactive list) -= this
+		Interactive.list -= this
 		if(solid) Interactive.solids -= this
 	}
 	
 	//Long ass-collision code. 
 	
 	def collidesOther(x:Float, y:Float, other:Interactive):Boolean = {
-		val nbody = body
-		nbody.setLocation(x,y)
-		nbody.intersects(other.body)
+		val nbody = body.at(x,y)
+		nbody.insideOf(other.body.at(other.position))
 	}
 	
 	def allPlaceMeetingList[A <: Interactive](x:Float, y:Float, objs:ArrayBuffer[A]):ArrayBuffer[A] = {
-		val nbody = body
-		nbody.setLocation(x,y)
-		objs.filter(_.body.intersects(nbody))
+		val nbody = body.at(x,y)
+		objs.filter(x=>x.body.at(x.position).insideOf(nbody))
 	}
 	
 	def placeMeetingList[A <: Interactive](x:Float, y:Float, objs:ArrayBuffer[A]):Option[A] = {
-		val nbody = body
-		nbody.setLocation(x,y)
-		objs.toStream.filter(_.body.intersects(nbody)).headOption
+		val nbody = body.at(x,y)
+		objs.toStream.filter(x=>x.body.at(x.position).insideOf(nbody)).headOption
 	}
 	
 	def collidesList(x:Float, y:Float, objs:ArrayBuffer[Interactive]):Boolean = {
-		val nbody = body
-		nbody.setLocation(x,y)
-		objs.toStream.exists(_.body.intersects(nbody))
+		val nbody = body.at(x,y)
+		objs.toStream.exists(x=>x.body.at(x.position).insideOf(nbody))
 	}
 	
 	def allPlaceMeeting(x:Float, y:Float, onlySolids:Boolean):ArrayBuffer[Interactive] = {
 		val objs = {
-			if(onlySolids) (Interactive solids)
-			else           (Interactive list)
+			if(onlySolids) (Interactive.solids)
+			else           (Interactive.list)
 		}
 		allPlaceMeetingList(x, y, objs)
 	}
 	
 	def placeMeeting(x:Float, y:Float, onlySolids:Boolean):Option[Interactive] = {
 		val objs = {
-			if(onlySolids) (Interactive solids)
-			else           (Interactive list)
+			if(onlySolids) (Interactive.solids)
+			else           (Interactive.list)
 		}
 		placeMeetingList(x, y, objs)
 	}
 	
 	def collidesAny(x:Float, y:Float, onlySolids:Boolean):Boolean = {
 		val objs = {
-			if(onlySolids) (Interactive solids)
-			else (Interactive list)
+			if(onlySolids) (Interactive.solids)
+			else (Interactive.list)
 		}
 		collidesList(x, y, objs)
 	}

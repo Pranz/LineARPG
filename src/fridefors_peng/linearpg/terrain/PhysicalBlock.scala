@@ -7,7 +7,7 @@ import fridefors_peng.linearpg.objects.Physical
  * Any block who has physical properties, like velocity.
  */
 class PhysicalBlock(pos:Vector, len:Int, wid:Int) 
-		extends Block(pos:Vector, len:Int, wid:Int) with Physical {
+		extends Block(pos:Vector, len:Int, wid:Int) with Physical{
 	var gravity = 0.0f
 
 	var acceleration = V(0,0)

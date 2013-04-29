@@ -5,11 +5,10 @@ package fridefors_peng.linearpg.objects
  * Make the amount of frames -1 to make the Alarm instantly destroy itself.
  */
 class Alarm(milliseconds:Int, f: () => Unit, loop:Boolean = false) extends GameObject {	
-	if(milliseconds == 0){
+	if(milliseconds==0)
 		execute
-	}else if (milliseconds == -1){
+	else if(milliseconds<0)
 		destroy
-	}
 
 	var currentFrame = 1
 	
@@ -20,7 +19,7 @@ class Alarm(milliseconds:Int, f: () => Unit, loop:Boolean = false) extends GameO
 			currentFrame += delta
 	}
 	
-	def execute {
+	def execute{
 		f()
 		if(loop)
 			currentFrame = 0

@@ -18,5 +18,5 @@ class TestAction(ent:Entity) extends SingleAction(ent) {
 		new StraightBullet(ent.position, 0.1f, ent)
 	}
 
-	def then(): Unit = {}
+	def thenAction(): Unit = {}
 }

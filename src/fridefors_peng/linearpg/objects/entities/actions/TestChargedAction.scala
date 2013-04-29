@@ -14,6 +14,6 @@ class TestChargedAction(ent:Entity)  extends ChargedAction(ent)  {
 	}
 
 	def action(): Unit = {}
-	def then(): Unit = {}
+	def thenAction(): Unit = {}
 	def onClick(): Unit = {}
 }

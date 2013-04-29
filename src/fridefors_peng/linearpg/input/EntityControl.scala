@@ -1,24 +1,23 @@
 package fridefors_peng.linearpg.input
 
-import org.newdawn.slick.Input
 import fridefors_peng.linearpg.objects.entities.Entity
-import fridefors_peng.linearpg.Main
 import fridefors_peng.linearpg.objects.Timer
+import lolirofle.gl2dlib.GameHandler
+import lolirofle.gl2dlib.data.Direction
 
 /**
  * Controls any entity. General and thus final.
  */
 
 final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
-	
 	var curAction = 0
-	val reverseKeyMap = keyMap.map(_ swap)
+	val reverseKeyMap = keyMap.map(_.swap)
 
-	def handleKeys(input: Input): Unit = {
-		if (input.isKeyDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Entity.LEFT)
-		if (input.isKeyDown(keyMap(Control.Key.MOVE_RIGHT))) ent.run(Entity.RIGHT)
-		if (input.isKeyDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {
-			case Some(action) => action whileClicked
+	def update(delta:Int){
+		if (GameHandler.keyIsDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Direction.Left)
+		if (GameHandler.keyIsDown(keyMap(Control.Key.MOVE_RIGHT))) ent.run(Direction.Right)
+		if (GameHandler.keyIsDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {
+			case Some(action) => action.whileClicked
 			case None         => {}
 		}
 	}
@@ -33,7 +32,7 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	def expects(actionID:Int) =
 		actionID == exp
 	
-	def keyPressed(key:Int, keyChar:Char){
+	def keyPressed(key:Int){
 		
 		//get Control.Key enumeration value derived from Input.KEY int value
 		val key_ = if(reverseKeyMap.contains(key))
@@ -67,7 +66,7 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 		}
 		
 	}
-	def keyReleased(key:Int, keyChar:Char){
+	def keyReleased(key:Int){
 		val key_ = if(reverseKeyMap.contains(key))
 			reverseKeyMap(key)
 			else -1

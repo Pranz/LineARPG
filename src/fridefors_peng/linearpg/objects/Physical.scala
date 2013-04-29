@@ -2,15 +2,16 @@ package fridefors_peng.linearpg.objects
 
 import fridefors_peng.linearpg.{Vector, NullVector}
 import collection.mutable.ArrayBuffer
-import org.newdawn.slick.geom.Rectangle
+import lolirofle.gl2dlib.geom.Rectangle
 import fridefors_peng.linearpg.objects.entities.Entity
+import lolirofle.gl2dlib.geom.Shape
 
 /**
  * Any object that is affected by gravity and has velocity and acceleration.
  * Physical solids also affect other physical objects movements.
  */
 
-trait Physical extends Interactive {
+trait Physical extends Interactive{
 	val V = Vector
 	
 	implicit def extractPhysicalOption(option:Option[Physical]):Physical = option match {
@@ -18,7 +19,7 @@ trait Physical extends Interactive {
 		case None      => DefaultPhysical
 	}
 	
-	(Physical list) += this
+	Physical.list += this
 	
 	var movement:Vector
 	var acceleration:Vector
@@ -61,7 +62,7 @@ trait Physical extends Interactive {
 	
 	def exertForce(force:Vector) {
 		if(solid && force != NullVector){
-			val objs = allPlaceMeetingList(position.x + force.x, position.y + force.y, Entity list)
+			val objs = allPlaceMeetingList(position.x + force.x, position.y + force.y, Entity.list)
 			objs foreach {(o) =>
 				o.relativeObject = Some(this)
 				o.position += force
@@ -71,7 +72,7 @@ trait Physical extends Interactive {
 
 	override def destroy {
 		super.destroy
-		(Physical list) -= this
+		Physical.list -= this
 	}
 }
 
@@ -79,7 +80,7 @@ object Physical{
 	val list:ArrayBuffer[Physical] = ArrayBuffer()
 }
 
-object DefaultPhysical extends Interactive(NullVector, new Rectangle(0,0,0,0)) with Physical {
+object DefaultPhysical extends Interactive(NullVector,Rectangle(0,0)) with Physical {
 	var movement:Vector = Vector(0,0)
 	var acceleration:Vector = Vector(0,0)
 	var gravity:Float = 0

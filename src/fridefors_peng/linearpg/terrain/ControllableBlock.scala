@@ -8,7 +8,7 @@ import fridefors_peng.linearpg.Vector
 
 abstract class ControllableBlock(pos:Vector, len:Int, wid:Int, val blockID:Int) extends PhysicalBlock(pos, len, wid) {
 	
-	(ControllableBlock list) += this
+	ControllableBlock.list += this
 	
 	case class Property(max:Int){
 		var curVal:Float = 0
