@@ -27,7 +27,6 @@ class LineARPGame() extends Game{
 	override def onRender{
 		Renderable.list.foreach(_.draw())
 		Main.drawList(4,4,("FPS: "+FPS)::debugList)
-		
 	}
 	override def onClose{}
 	override def onWindowResize(width:Int,height:Int,fullscreen:Boolean){}

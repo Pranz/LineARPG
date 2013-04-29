@@ -13,7 +13,7 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	var curAction = 0
 	val reverseKeyMap = keyMap.map(_.swap)
 
-	def update(delta:Int){
+	override def update(delta:Int){
 		if (GameHandler.keyIsDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Direction.Left)
 		if (GameHandler.keyIsDown(keyMap(Control.Key.MOVE_RIGHT))) ent.run(Direction.Right)
 		if (GameHandler.keyIsDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {

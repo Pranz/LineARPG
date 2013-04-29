@@ -1,6 +1,7 @@
 package lolirofle.gl2dlib.gl
 
 import org.lwjgl.opengl.GL11
+import lolirofle.gl2dlib.graphics.Color
 
 object GLDraw{
 	def getCircleSegments(radius:Float):Int=(10*math.sqrt(radius)).toInt
@@ -54,6 +55,7 @@ object GLDraw{
 	private var _xScale:Float=1;
 	private var _yScale:Float=1;
 	private var _rotation:Float=0;
+	private var _color:Color=Color.WHITE;
 
 	def xOffset=_xOffset;
 	def yOffset=_yOffset;
@@ -61,7 +63,8 @@ object GLDraw{
 	def yScale=_yScale;
 	def rotation=_rotation;
 	def lineWidth=GL11.glGetFloat(GL11.GL_LINE_WIDTH);
-	
+	def color=_color
+
 	/**
 	 * @param rotation 0-360 degrees
 	 */
@@ -110,5 +113,10 @@ object GLDraw{
 	
 	def lineWidth_=(width:Float)={
 		GL11.glLineWidth(width);
+	}
+	
+	def color_=(color:Color){
+		_color=color;
+		GL11.glColor4ub(color.red,color.blue,color.green,color.alpha)
 	}
 }

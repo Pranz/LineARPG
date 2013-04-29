@@ -15,27 +15,21 @@ import lolirofle.gl2dlib.data.Direction
 abstract class Entity(pos:Vector,body:Shape) extends Interactive(pos,body) with Physical with Renderable{
 	Entity.list += this
 	
-	private var airspdf = 0.1f
-	var airFricFactor  = 0f
+	def airFricFactor:Float
+	def airSpeedFactor:Float
+	def jumpPower:Float
 	
-	def airSpeedFactor:Float = {
-		if(vspeed < 0) 0
-		else airspdf
-	}
-	
-	val hp:Double
 	val fAction = new Array[Option[Action]](10) map {_ => None : Option[Action]}
 	
-	var movement        = V(0, 0)
-	var acceleration    = V(0, 0)
-	var gravity         = 0.001f
-	var moving          = false
-	var jumpPower:Float
+	final override var movement        = V(0,0)
+	final override var acceleration    = V(0,0)
+	override val gravity = 0.001f //TODO: "Gravity" value based on shape of body (Air resistance)
+	
 	var hDir:Horizontal = Direction.Right
 	private var speed_prv  = 0.06f
 	private var hfriction_prv  = 0.03f
 	
-	def hfriction = hfriction_prv * speedMod
+	def hfriction = hfriction_prv * speedMod//TODO: Friction based on surface of different objects
 	def hfriction_=(value:Float):Unit = {
 		hfriction_prv = value
 	}
@@ -43,17 +37,18 @@ abstract class Entity(pos:Vector,body:Shape) extends Interactive(pos,body) with 
 	private var speedMod = 1f //calculated every update due to performance. Init value
 	
 	var maxhspd   = 0.25f
-	def maxhSpeed:Float = {
-		if (onGround) speedMod * maxhspd
-		else speedMod * maxhspd * airSpeedFactor * 5
-	}
+	def maxhSpeed:Float=
+		if(onGround)
+			speedMod * maxhspd
+		else
+			speedMod * maxhspd * airSpeedFactor*2
 	
 	def speed = speedMod * speed_prv
 	def speed_=(value:Float):Unit = {
 		speed_prv = value
 	}
 	
-	def addSpeedMod(spd:Float, duration:Int = -1) {
+	def addSpeedMod(spd:Float, duration:Int = -1) {//TODO: Make this safer, and not with lists. Now we could remove the speedMod anytime we want and all the values would be messed up
 		speedMod *= spd
 		new Alarm(duration, () => removeSpeedMod(spd))
 	}
@@ -80,48 +75,45 @@ abstract class Entity(pos:Vector,body:Shape) extends Interactive(pos,body) with 
 			if (math.abs(hspeed) < hfric) hspeed = 0
 			else hspeed -= math.signum(hspeed) * hfric
 		}
-		else moving = false
 	}
 	
 	def run(dir:Horizontal) {
 		hDir = dir
-		val spd = {
-			if (onGround) speed
-			else speed * airSpeedFactor
-		}
-		moving = true
-		if ((math.abs(hspeed + spd*dir)) >= maxhSpeed && dir.toByte == Math.signum(hspeed)){
-			if (spd > (math.abs(hspeed + spd*dir)) - maxhSpeed) hspeed = maxhSpeed * math.signum(hspeed)
+		val spd =if(onGround)speed else	speed*airSpeedFactor
+		
+		if((math.abs(hspeed + spd*dir)) >= maxhSpeed && dir.toByte == Math.signum(hspeed)){
+			if (spd > (math.abs(hspeed + spd*dir)) - maxhSpeed)
+				hspeed = maxhSpeed * math.signum(hspeed)
 		}
 		else hspeed += spd*dir
 	}
 	
-	def jump() {
-		if(onGround){
+	def jump(){
+		if(onGround)
 			vspeed -= jumpPower
-		}
 	}
 	
-	def moveX(x:Float) : Float=
-		if (x >= 1 || x <= -1){
-			if(collidesAny(position.x+x,position.y,true)){
-				hspeed=0;
-				return moveX(x-math.signum(x))
+	def xMovement(x:Float):Float=
+		if(x >= 1 || x <= -1){//If speed>=1
+			if(collidesAny(position.x+x,position.y,true)){//If colliding with anything at this speed
+				hspeed=0;//We collided, stop movement
+				return xMovement(x-math.signum(x))//See how far we can move without colliding with 1 length unit at a time
 			}
 			else return x;
 		}
-		else if(collidesAny(position.x+math.signum(x),position.y,true)){
-			hspeed=0;
-			return 0;
-		}
-		else
-			return x
+		else//Else if speed<1 (Another type of collision checking than the 1 length unit code)
+			if(collidesAny(position.x+math.signum(x),position.y,true)){
+				hspeed=0;
+				return 0;
+			}
+			else//Else: No collision anywhere, move the distance requested
+				return x
 	
-	def moveY(y:Float) : Float=
+	def yMovement(y:Float):Float=
 		if(y >= 1 || y <= -1){
 			if (collidesAny(position.x, position.y + y, true)){
 				vspeed = 0
-				return moveY(y - math.signum(y));
+				return yMovement(y - math.signum(y));
 			}
 			else
 				return y
@@ -133,7 +125,7 @@ abstract class Entity(pos:Vector,body:Shape) extends Interactive(pos,body) with 
 		else
 			return y
 	
-	override def movementModifier(dpos:Vector) = V(moveX(dpos.x), moveY(dpos.y))
+	override def movementModifier(dpos:Vector) = V(xMovement(dpos.x), yMovement(dpos.y))
 }
 
 object Entity{

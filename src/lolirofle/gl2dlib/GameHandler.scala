@@ -64,7 +64,7 @@ object GameHandler{
 			game.onUpdate(calcDelta());
 			
 			//Render
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			GL11.glPushMatrix();
 			game.onRender();
 			GL11.glPopMatrix();
@@ -126,12 +126,12 @@ object GameHandler{
 	}
 	
 	def gl2dInit(){
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);//Using 2D textures
 		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);//DIsable because 2D has no depth
+		GL11.glDisable(GL11.GL_LIGHTING);//Disable because lightning isn't needed in 2D
         
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearColor(0f,0f,0f,0f);//Makes the "clear" color to black
         GL11.glClearDepth(1);
 		
 		GL11.glEnable(GL11.GL_BLEND);

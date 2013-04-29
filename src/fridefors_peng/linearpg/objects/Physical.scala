@@ -21,21 +21,20 @@ trait Physical extends Interactive{
 	
 	Physical.list += this
 	
+	def gravity:Float
+	
 	var movement:Vector
 	var acceleration:Vector
-	var gravity:Float
 	var friction:Double = 0
 	
 	var relativeObject:Option[Physical] = None
 	var prvRelativeObject:Option[Physical] = None
 	
 	def hspeed = movement.x
-	def hspeed_= (hsp:Float):Unit = 
-		movement = V(hsp,movement.y)
+	def hspeed_= (hsp:Float){movement = V(hsp,movement.y)}
 		
 	def vspeed = movement.y
-	def vspeed_= (vsp:Float):Unit = 
-		movement = V(movement.x, vsp)
+	def vspeed_= (vsp:Float){movement = V(movement.x, vsp)}
 	
 	override def update(delta:Int) {
 		super.update(delta)
@@ -58,7 +57,7 @@ trait Physical extends Interactive{
 	}
 	
 	def velocity = movement.length
-	def velocity_= (vel:Double):Unit = movement.whoseLengthIs(vel);
+	def velocity_= (vel:Double):Unit = movement.withLength(vel);
 	
 	def exertForce(force:Vector) {
 		if(solid && force != NullVector){
@@ -70,7 +69,7 @@ trait Physical extends Interactive{
 		}
 	}
 
-	override def destroy {
+	override def destroy{
 		super.destroy
 		Physical.list -= this
 	}
@@ -81,7 +80,7 @@ object Physical{
 }
 
 object DefaultPhysical extends Interactive(NullVector,Rectangle(0,0)) with Physical {
-	var movement:Vector = Vector(0,0)
-	var acceleration:Vector = Vector(0,0)
-	var gravity:Float = 0
+	override var movement:Vector = NullVector
+	override var acceleration:Vector = NullVector
+	val gravity:Float = 0
 }

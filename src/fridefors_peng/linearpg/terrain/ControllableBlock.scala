@@ -7,8 +7,18 @@ import fridefors_peng.linearpg.Vector
  */
 
 abstract class ControllableBlock(pos:Vector, len:Int, wid:Int, val blockID:Int) extends PhysicalBlock(pos, len, wid) {
-	
 	ControllableBlock.list += this
+	
+	val property:Array[ControllableBlock.Property]
+	val switch:Array[Boolean]
+	def apply(prop:Int) = property(prop)
+	
+	def toggle(sw:Int):Unit = switch(sw) = !switch(sw)
+}
+
+object ControllableBlock {
+	val list = collection.mutable.ArrayBuffer[ControllableBlock]()
+	def getBlocksWithID(id: Int) = list.filter(_.blockID == id)
 	
 	case class Property(max:Int){
 		var curVal:Float = 0
@@ -25,16 +35,4 @@ abstract class ControllableBlock(pos:Vector, len:Int, wid:Int, val blockID:Int) 
 		}
 		def get:Float = curVal
 	}
-	
-	val property:Array[Property]
-	val switch:Array[Boolean]
-	def apply(prop:Int) = property(prop)
-	
-	def toggle(sw:Int):Unit = switch(sw) = !switch(sw)
-	
-}
-
-object ControllableBlock {
-	val list = collection.mutable.ArrayBuffer[ControllableBlock]()
-	def getBlocksWithID(id: Int) = list.filter(_.blockID == id)
 }
