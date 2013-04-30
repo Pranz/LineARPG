@@ -103,40 +103,43 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		}
 	}
 	
-	def moveX(x:Float) : Float={
-		if (x >= 1 || x <= -1){
-			if (collidesAny(position.x + x, position.y, true)) {
+	def moveX(dpos : Vector) : Float={
+		if (dpos.x >= 1 || dpos.x <= -1){
+			if (collidesAny(position.x + dpos.x, position.y + dpos.y, true)) {
 				hspeed = 0
-				return moveX(x - math.signum(x))
+				return moveX(V(dpos.x - math.signum(dpos.x), dpos.y))
 			}
-			else return x;
+			else return dpos.x;
 		}
-		else if(collidesAny(position.x + math.signum(x), position.y, true)){
+		else if(collidesAny(position.x + math.signum(dpos.x), position.y + dpos.y, true)){
 			hspeed = 0
 			return 0;
 		}
 		else
-			return x
+			return dpos.x
 	}
 	
-	def moveY(y:Float) : Float ={
-		if(y >= 1 || y <= -1){
-			if (collidesAny(position.x, position.y + y, true)){
+	def moveY(dpos : Vector) : Float ={
+		if(dpos.y >= 1 || dpos.y <= -1){
+			if (collidesAny(position.x + dpos.x, position.y + dpos.y, true)){
 				vspeed = 0
-				return moveY(y - math.signum(y));
+				return moveY(V(dpos.x, dpos.y - math.signum(dpos.y)));
 			}
 			else
-				return y
+				return dpos.y
 		}
-		else if(collidesAny(position.x, position.y + math.signum(y), true)){
+		else if(collidesAny(position.x + dpos.x, position.y + math.signum(dpos.y), true)){
 			vspeed = 0
 			return 0
 		}
 		else
-			return y
+			return dpos.y
 	}
 	
-	override def movementModifier(dpos:Vector) = V(moveX(dpos.x), moveY(dpos.y))
+	override def movementModifier(dpos:Vector) = {
+		val xMove = moveX(V(dpos.x, 0))
+		V(xMove, moveY(V(xMove, dpos.y)))
+	}
 }
 
 object Entity{
