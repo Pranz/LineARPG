@@ -10,6 +10,7 @@ import fridefors_peng.linearpg.objects.entities.actions.Action
 class LineARPG extends Game {
 	var obj : Humanoid = null
 	var control : EntityControl = null
+	var dt : Int = 0
 
 	def init(container: GameContainer): Unit = {
 		obj = new Humanoid(Vector(100, 250))
@@ -21,7 +22,11 @@ class LineARPG extends Game {
 	}
 
 	def update(container: GameContainer, delta_t: Int): Unit = {
-		(GameObject list).clone foreach (_ update(delta_t))
+		dt = {
+			if (delta_t > 50) 50
+			else delta_t
+		}
+		(GameObject list).clone foreach (_ update(dt))
 	}
 
 	def render(container: GameContainer, g: Graphics): Unit = {
@@ -56,7 +61,8 @@ class LineARPG extends Game {
 			"velocity: "  + obj.velocity,
 			"relative x: "+ obj.prvRelativeObject.movement.x,
 			"relative y: "+ obj.prvRelativeObject.movement.y,
-			"selected action: "+ optionActionName(obj.fAction(control.curAction))
+			"selected action: "+ optionActionName(obj.fAction(control.curAction)),
+			"dt: " + dt
 		) 
 	}
 }

@@ -44,10 +44,10 @@ trait Physical extends Interactive {
 		//TODO: This delta code makes it feel a bit weird, is it correctly calculated? Try 10 FPS and compare to 60 FPS
 		movement += V(0, gravity) * delta
 		movement += acceleration * delta
-		
+		exertForce(movement * delta)
 		position+=movementModifier(movement*delta);
 		
-		exertForce(movement * delta)
+		
 		
 		if (friction != 0) 
 			velocity -= friction*delta

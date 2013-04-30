@@ -24,6 +24,7 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 		else airspdf
 	}
 	
+	var dt : Int = 0
 	val hp:Double
 	val fAction = new Array[Option[Action]](10) map {_ => None : Option[Action]}
 	
@@ -33,8 +34,8 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	var moving       = false
 	var jumpPower:Float
 	var hDir         = 1
-	private var speed_prv  = 0.06f
-	private var hfriction_prv  = 0.03f
+	private var speed_prv  = 0.0025f
+	private var hfriction_prv  = 0.0012f
 	
 	def hfriction = hfriction_prv * speedMod
 	def hfriction_=(value:Float):Unit = {
@@ -70,10 +71,11 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	override def update(delta:Int) {
 		super.update(delta)
 		applyHFriction
+		dt = delta
 	}
 	
 	def applyHFriction {
-		val hfric = {
+		val hfric = (dt) * {
 			if (onGround) hfriction
 			else hfriction * airFricFactor
 		}
@@ -86,7 +88,7 @@ abstract class Entity( pos:Vector, body:Shape) extends Interactive(pos, body) wi
 	
 	def run(dir:Int) {
 		hDir = dir
-		val spd = {
+		val spd = dt * {
 			if (onGround) speed
 			else speed * airSpeedFactor
 		}
