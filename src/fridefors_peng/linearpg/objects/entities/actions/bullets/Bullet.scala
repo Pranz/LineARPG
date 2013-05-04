@@ -1,21 +1,22 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Interactive, Physical, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Mass, Physical, Renderable, Alarm}
 import collection.mutable.ArrayBuffer
 import fridefors_peng.linearpg.objects.entities.Entity
-import fridefors_peng.linearpg.{Vector, NullVector}
+import lolirofle.gl2dlib.data.{Vector,NullVector}
 import fridefors_peng.linearpg.terrain.Terrain
 import lolirofle.gl2dlib.geom.Shape
+import lolirofle.gl2dlib.data.Position
 
 /**
  * A bullet is a physical object which interacts with entities and possible terrain.
  * Main source for damage and debuffs. Set durability to -1 for infinite durability. 
  */
 
-abstract class Bullet(pos:Vector,bd:Shape,ent:Entity,relativePos:Boolean=false) 
-		extends Interactive(pos,bd) with Physical with Renderable{
+abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false) 
+		extends Mass(pos,bd) with Physical with Renderable{
 	var gravity = 0 : Float
-	var acceleration = NullVector : Vector
+	override val friction=0f
 	val firstPos = ent.position
 	
 	var invulnerable_ents = ArrayBuffer(ent)
@@ -33,14 +34,14 @@ abstract class Bullet(pos:Vector,bd:Shape,ent:Entity,relativePos:Boolean=false)
 	
 	override def update(delta:Int) {
 		//Loop through all collision of ents, filter out those who are invulnerable
-		(allPlaceMeetingList(position.x,position.y, Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
+		(allPlaceMeeting(position,Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
 			ent => {
 				durability -= 1
 				if (durability == 0) destroy
 				interactWithEnt(ent)
 				makeInvulnerable(ent)
 			})
-		interactWithTerrain(placeMeetingList(position.x, position.y, Terrain.list))
+		interactWithTerrain(placeMeeting(position,Terrain.list))
 		
 		super.update(delta)
 		if(relativePos){

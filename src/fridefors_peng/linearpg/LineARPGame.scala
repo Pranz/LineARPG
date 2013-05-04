@@ -7,18 +7,26 @@ import fridefors_peng.linearpg.objects._
 import fridefors_peng.linearpg.objects.entities.actions.Action
 import lolirofle.gl2dlib.Game
 import lolirofle.gl2dlib.graphics.text.DefaultFont
+import lolirofle.gl2dlib.data.Vector
+import lolirofle.gl2dlib.data.Position
+import org.lwjgl.input.Keyboard
 
 class LineARPGame() extends Game{
-	var obj:Humanoid = new Humanoid(Vector(100, 250))
+	var shouldExit=false
+	
+	var obj:Humanoid = new Humanoid(Position(100, 250))
 	var control:EntityControl = new EntityControl(obj,0)
 	
-	new Block(Vector(100, 500), 50, 2)
-	new Block(Vector(600, 400), 1, 10)
-	new Block(Vector(0, 600), 5, 1)
-	new PhysicalBlock(Vector(360, 450), 6, 2){
-		hspeed=0.1f;
+	new Block(Position(100, 500), 50, 2)
+	new Block(Position(600, 400), 1, 6)
+	new Block(Position(200, 450), 1, 2)
+	new Block(Position(0, 600), 5, 1)
+	new PhysicalBlock(Position(360, 450), 6, 2){
+		hspeed=0.1f;		
 		new Alarm(1000,()=>{hspeed = -hspeed},true)
 	}
+	
+	new Humanoid(Position(260, 40))
 	
 	override def onUpdate(delta:Int){
 		GameObject.list.clone foreach (_ update(delta))
@@ -31,25 +39,31 @@ class LineARPGame() extends Game{
 	override def onClose{}
 	override def onWindowResize(width:Int,height:Int,fullscreen:Boolean){}
 	override def onKeyEvent(key:Int,state:Boolean){
-		if(state)
-			control.keyPressed(key)
+		if(state){
+			if(key==Keyboard.KEY_ESCAPE)
+				close()
+			else if(key==Keyboard.KEY_R)
+				reset();
+			else
+				control.keyPressed(key)
+		}
 		else
 			control.keyReleased(key)
 	}
 	override def onKeyCharEvent(chr:Char){}
 
-	override def isCloseRequested=false
-		def debugList:List[String] = {
-		def optionActionName(maybeA : Option[Action]) : String = maybeA match {
-			case Some(action) => action.name
-			case _            => "No action"
-		}
-		
-		implicit def extractPhysicalOption(option:Option[Physical]):Physical = option match {
-			case Some(obj) => obj
-			case None      => DefaultPhysical
-		}
-		
+	override def isCloseRequested=shouldExit
+
+	def close(){
+		shouldExit=true
+	}
+	
+	def reset(){//TODO: All the global lists containing objects won't reset 
+		Main.restart=true;
+		close();
+	}
+	
+	def debugList:List[String] = {
 		List(
 			"x: "         + obj.position.x,
 			"y: "         + obj.position.y,
@@ -58,9 +72,12 @@ class LineARPGame() extends Game{
 			"hSpd: "	      + obj.hspeed,
 			"vSpd: "       + obj.vspeed,
 			"Velocity: "  + obj.velocity,
-			"Relative x: "+ obj.prvRelativeObject.movement.x,
-			"Relative y: "+ obj.prvRelativeObject.movement.y,
-			"Selected Action: "+ optionActionName(obj.fAction(control.curAction))
+			"Selected Action: "+ (
+					obj.fAction(control.curAction)match {
+						case Some(action) => action.name
+						case _            => "No action"
+					}
+			)
 		) 
 	}
 }

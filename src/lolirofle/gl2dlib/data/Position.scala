@@ -1,12 +1,10 @@
 package lolirofle.gl2dlib.data
 
-object Position{
-	def apply(x:Float,y:Float)=Pos(x,y)
+case class Position(val x:Float,val y:Float){
+	def +(v:Vector)=Position(this.x+v.x,this.y+v.y)
+	def -(v:Vector)=Position(this.x-v.x,this.y-v.y)
+	def -(pos:Position)=Vector(this.x-pos.x,this.y-pos.y)
+	def distanceTo(other:Position)=math.hypot(other.x-this.x,other.y-this.y)
+	def toTuple = (x,y)
+	override def toString='('+x.toString+','+y.toString+')'
 }
-
-trait Position{
-	def x:Float;
-	def y:Float;
-}
-
-case class Pos(var x:Float,var y:Float) extends Position{}

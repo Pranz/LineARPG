@@ -1,17 +1,38 @@
-package fridefors_peng.linearpg
-
-import lolirofle.gl2dlib.data.Position
+package lolirofle.gl2dlib.data
 
 /**
  * Mathematical object, a 2-dimensional vector. 
  */
-case class Vector(x:Float,y:Float)extends Position{//TODO: withDirection
+case class Vector(x:Float,y:Float){
 	def withLength(len:Double):Vector=
 		if(len==0)
 			NullVector
 		else
 			Vector((len*math.sin(direction)).toFloat,(len*math.cos(direction)).toFloat)
 
+	def withDirection(angle:Double)=//TODO: Test this code
+		Vector((x*math.cos(angle)-y*math.sin(angle)).toFloat,(x*math.sin(angle)+y*math.cos(angle)).toFloat);
+
+	def asBiggerRatio=
+		if(x==0||y==0)
+			NullVector
+		else{
+			if(x-y>0)//If x is bigger than y
+				Vector(x/y,1)
+			else
+				Vector(1,y/x)
+		}
+	
+	def asSmallerRatio=
+		if(x==0||y==0)
+			NullVector
+		else{
+			if(x-y>0)//If x is bigger than y
+				Vector(1,y/x)
+			else
+				Vector(x/y,1)
+		}
+	
 	lazy val length=math.hypot(x,y)
 	lazy val direction=math.atan2(x,y)
 	
@@ -24,7 +45,5 @@ case class Vector(x:Float,y:Float)extends Position{//TODO: withDirection
 	
 	override def toString = x.toString + ", " + y.toString
 }
-
-case class PolarVector(direction:Double,length:Double)//TODO: Extend Position and override x,y with functions
 
 object NullVector extends Vector(0,0)

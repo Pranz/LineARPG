@@ -24,10 +24,12 @@ trait Polygon extends Shape{
 	def draw(x:Float,y:Float,filled:Boolean){
 		(if(filled)GLGeom.QUADS else GLGeom.LINE_LOOP).draw{
 			vertices.foreach(p=>{
-				GL11.glVertex3f(p.x,p.y,0);
+				GL11.glVertex3f(p.x,p.y,0);//TODO: Use GLDraw functions, make one
 			});
 		};
 	}
+	
+	def angleSum:Float=if(sides<3)0 else (sides-2)*180
 }
 
 trait RegularPolygon extends Polygon{
@@ -43,4 +45,5 @@ trait RegularPolygon extends Polygon{
 		else if(sides==4)side*side;
 		else (side*side*sides)/(4*math.sqrt(3.0)).toFloat;
 	
+	def angle=angleSum/sides
 }

@@ -1,12 +1,13 @@
 package fridefors_peng.linearpg.terrain
 
-import fridefors_peng.linearpg.Vector
+import lolirofle.gl2dlib.data.Vector
+import lolirofle.gl2dlib.data.Position
 
 /*
  * A block who is controlled by a BlockController object.
  */
 
-abstract class ControllableBlock(pos:Vector, len:Int, wid:Int, val blockID:Int) extends PhysicalBlock(pos, len, wid) {
+abstract class ControllableBlock(pos:Position, len:Int, wid:Int, val blockID:Int) extends PhysicalBlock(pos, len, wid) {
 	ControllableBlock.list += this
 	
 	val property:Array[ControllableBlock.Property]

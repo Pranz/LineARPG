@@ -7,13 +7,19 @@ object Main{
 	val TILE_SIZE = 16
 	var game:Game=null
 	
-	def main(args: Array[String]){
-		game=new LineARPGame()
-		
-		GameHandler.init(game,"Test",displayWidth=1024,displayHeight=756);
-		game.title="LineARPG"
-		game.FPS=60
-		GameHandler.start();
+	var restart=false;
+	
+	def main(args:Array[String]){
+		do{
+			restart=false;
+			
+			game=new LineARPGame()
+			
+			GameHandler.init(game,"Test",displayWidth=1024,displayHeight=756);
+			game.title="LineARPG"
+			game.FPS=60
+			GameHandler.start();
+		}while(restart);
 	}
 	
 	def drawList(x:Float,y:Float,list:List[String]) {

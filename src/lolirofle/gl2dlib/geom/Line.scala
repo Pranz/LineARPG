@@ -8,8 +8,8 @@ object Line{
 
 case class Line(var x:Float,var y:Float) extends RegularPolygon{
 	def length=math.hypot(x,y).toFloat
-	def side=length
-	def sides=2
+	override def side=length
+	override def sides=2
 	
 	override def vertices=List(Position(0,0),Position(x,y));
 
