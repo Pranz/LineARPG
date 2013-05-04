@@ -47,8 +47,6 @@ trait Physical extends Interactive {
 		exertForce(movement * delta)
 		position+=movementModifier(movement*delta);
 		
-		
-		
 		if (friction != 0) 
 			velocity -= friction*delta
 			

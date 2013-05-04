@@ -13,27 +13,35 @@ import collection.immutable.HashMap
  * Any object of Control also contains a keyMap, according to it's PlayerID
  */
 
-abstract class Control(playerID:Int) extends GameObject with KeyListener {
+abstract class Control(val playerID:Int) extends GameObject with KeyListener {
 	def handleKeys(input:Input):Unit
 	Main.input.addKeyListener(this)
+	(Control list) += this
 
 	override final def update(delta:Int) {
-		handleKeys(Main.input)
+		if(isAcceptingInput) handleKeys(Main.input)
 	}
 
-	def keyMap = Control.keyMap(playerID)
+	val keyMap = Control.keyMap(playerID)
 
-	def isAcceptingInput = true
+	def isAcceptingInput = isActive
 	def setInput(input:Input):Unit = {} 
 	def inputEnded:Unit = {}
 	def inputStarted:Unit = {}
+	
+	//Any input that solos is the only one who accepts input for that particular playerID
+	var isActive = true
+	def solo() : Unit = Control.list.filter((ctrl) => ctrl != this && ctrl.playerID == this.playerID).foreach {_.isActive = false}
+	def unSolo() : Unit = Control.list.filter(_.playerID == this.playerID).foreach {_.isActive = true}
 }
 
 object Control {
+	
+	val list : ArrayBuffer[Control] = ArrayBuffer()
 	object Key extends Enumeration {
 		type Key = Value
 		val MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, PERFORM_ACTION, JUMP, CROUCH, ACTION_1, ACTION_2, ACTION_3, ACTION_4, 
-		ACTION_5, ACTION_6, ACTION_7, ACTION_8, ACTION_9, ACTION_0 = Value
+		ACTION_5, ACTION_6, ACTION_7, ACTION_8, ACTION_9, ACTION_0, CONSOLE_KEY = Value
 	}
 	
 	//TODO: value of keyMap should be made external to a config file
@@ -55,7 +63,8 @@ object Control {
 			Key.ACTION_7   -> Input.KEY_7,
 			Key.ACTION_8   -> Input.KEY_8,
 			Key.ACTION_9   -> Input.KEY_9,
-			Key.ACTION_0   -> Input.KEY_0
+			Key.ACTION_0   -> Input.KEY_0,
+			Key.CONSOLE_KEY-> Input.KEY_ENTER
 		)
 	)
 }

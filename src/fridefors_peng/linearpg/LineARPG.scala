@@ -1,6 +1,7 @@
 package fridefors_peng.linearpg
 
-import org.newdawn.slick.{Game, Graphics, GameContainer}
+import org.newdawn.slick.{Game, Graphics, GameContainer, UnicodeFont}
+import org.newdawn.slick.font.effects.ColorEffect;
 import fridefors_peng.linearpg.terrain._
 import fridefors_peng.linearpg.input._
 import fridefors_peng.linearpg.objects.entities.Humanoid
@@ -19,17 +20,20 @@ class LineARPG extends Game {
 		new Block(Vector(600, 200), 2, 50)
 		new PhysicalBlock(Vector(360, 450), 6, 2)
 		control = new EntityControl(obj, 0)
+		new MetaGameController(0)
+		initFonts
 	}
 
 	def update(container: GameContainer, delta_t: Int): Unit = {
 		dt = {
-			if (delta_t > 50) 50
+			if (delta_t > 100) 100
 			else delta_t
 		}
 		(GameObject list).clone foreach (_ update(dt))
 	}
 
 	def render(container: GameContainer, g: Graphics): Unit = {
+		g.setFont(Main.FNT_ANDALE_MONO)
 		g.translate(-Main.Camera.x,-Main.Camera.y)
 			(Renderable list) foreach (_.draw(g))
 		g.translate( Main.Camera.x, Main.Camera.y)
@@ -39,6 +43,18 @@ class LineARPG extends Game {
 	def closeRequested(): Boolean = true
 
 	def getTitle(): String = "LINEARPG"
+		
+	def initFonts {
+		initFont(Main.FNT_ANDALE_MONO)
+	}
+	
+	def initFont(fnt: UnicodeFont){
+		fnt.addAsciiGlyphs()
+		fnt.addGlyphs(400,600)
+		fnt.getEffects().asInstanceOf[java.util.List[ColorEffect]].add(new ColorEffect())
+		fnt.loadGlyphs()
+		
+	}
 		
 	def debugList:List[String] = {
 		def optionActionName(maybeA : Option[Action]) : String = maybeA match {

@@ -12,7 +12,7 @@ import fridefors_peng.linearpg.objects.Timer
 final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	
 	var curAction = 0
-	val reverseKeyMap = keyMap.map(_ swap)
+	val reverseKeyMap = keyMap.map(_ swap).withDefaultValue(-1)
 
 	def handleKeys(input: Input): Unit = {
 		if (input.isKeyDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Entity.LEFT)
@@ -36,11 +36,7 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	def keyPressed(key:Int, keyChar:Char){
 		
 		//get Control.Key enumeration value derived from Input.KEY int value
-		val key_ = if(reverseKeyMap.contains(key))
-			reverseKeyMap(key)
-			else -1
-
-		key_ match {
+		reverseKeyMap(key) match {
 			case Control.Key.JUMP   => ent.jump
 			case Control.Key.CROUCH => ent.addSpeedMod(0.5f)
 			case Control.Key.PERFORM_ACTION => {
@@ -52,7 +48,7 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 			case _ => {}
 		}
 		
-		curAction = key_ match {
+		curAction = reverseKeyMap(key) match {
 			case Control.Key.ACTION_1 => 0
 			case Control.Key.ACTION_2 => 1
 			case Control.Key.ACTION_3 => 2
@@ -67,11 +63,8 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 		}
 		
 	}
-	def keyReleased(key:Int, keyChar:Char){
-		val key_ = if(reverseKeyMap.contains(key))
-			reverseKeyMap(key)
-			else -1
-		key_ match {
+	def keyReleased(key:Int, keyChar:Char) =
+		reverseKeyMap(key) match {
 			case Control.Key.CROUCH => ent.removeSpeedMod(0.5f)
 			case Control.Key.PERFORM_ACTION => {
 				if (expects(curAction)){
@@ -83,6 +76,6 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 			}
 			case _ => {}
 		}
-	}
+	
 
 }
