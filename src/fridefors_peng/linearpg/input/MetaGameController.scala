@@ -41,6 +41,7 @@ class MetaGameController(id:Int) extends Control(id) {
 		
 	}
 	
+	//Copied from Misc
 	def setClipBoard(str:String) {
 		val ss : StringSelection = new StringSelection(str);
 	    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
