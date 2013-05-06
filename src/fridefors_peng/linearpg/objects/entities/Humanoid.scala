@@ -9,7 +9,7 @@ import lolirofle.gl2dlib.gl.GLDraw
 import lolirofle.gl2dlib.data.Position
 
 class Humanoid(pos:Position) extends Entity(pos,Rectangle(24,56)){	
-	override val jumpPower = 0.4f
+	override val jumpPower = 6f
 	override val airSpeedFactor = 0.105f
 	
 	fAction(0) = Some(new TestAction (this))

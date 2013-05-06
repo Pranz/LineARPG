@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Mass, Physical, Renderable}
+import fridefors_peng.linearpg.objects.{Matter, Mass, Renderable}
 import fridefors_peng.linearpg.objects.entities.Entity
 import lolirofle.gl2dlib.data.{Vector, NullVector}
 import fridefors_peng.linearpg.terrain.Terrain

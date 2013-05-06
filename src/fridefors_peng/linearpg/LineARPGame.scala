@@ -22,14 +22,14 @@ class LineARPGame() extends Game{
 	new Block(Position(200, 450), 1, 2)
 	new Block(Position(0, 600), 5, 1)
 	new PhysicalBlock(Position(360, 450), 6, 2){
-		hspeed=0.1f;		
-		new Alarm(1000,()=>{hspeed = -hspeed},true)
+		xMovement=1f;		
+		new Alarm(60,()=>{xMovement = -xMovement},true)
 	}
 	
 	new Humanoid(Position(260, 40))
 	
 	override def onUpdate(delta:Int){
-		GameObject.list.clone foreach (_ update(delta))
+		GameObject.list.clone foreach (_ update(1))
 	}
 
 	override def onRender{
@@ -69,8 +69,8 @@ class LineARPGame() extends Game{
 			"y: "         + obj.position.y,
 			"deltaX: "        + obj.deltaPos.x,
 			"deltaY: "        + obj.deltaPos.y,
-			"hSpd: "	      + obj.hspeed,
-			"vSpd: "       + obj.vspeed,
+			"xMovement: "	      + obj.xMovement,
+			"yMovement: "       + obj.yMovement,
 			"Velocity: "  + obj.velocity,
 			"Selected Action: "+ (
 					obj.fAction(control.curAction)match {

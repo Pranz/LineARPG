@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities
 
-import fridefors_peng.linearpg.objects.{Physical, Mass, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Mass, Matter, Renderable, Alarm}
 import fridefors_peng.linearpg.objects.entities.actions.Action
 import lolirofle.gl2dlib.data.Vector
 import lolirofle.gl2dlib.geom.Shape
@@ -14,7 +14,7 @@ import lolirofle.gl2dlib.data.NullVector
  * The Entity class. This is any unit in the game world, and can be player or AI controlled.
  * 
  */
-abstract class Entity(pos:Position,body:Shape) extends Mass(pos,body) with Physical with Renderable{
+abstract class Entity(pos:Position,body:Shape) extends Matter(pos,body) with Mass with Renderable{
 	Entity.list += this
 	
 	def airSpeedFactor:Float
@@ -22,14 +22,14 @@ abstract class Entity(pos:Position,body:Shape) extends Mass(pos,body) with Physi
 	
 	val fAction = new Array[Option[Action]](10) map {_ => None : Option[Action]}
 	
-	override val gravity = 0.001f //TODO: "Gravity" value based on shape of body (Air resistance)
+	override val gravity = 0.2f //TODO: "Gravity" value based on shape of body (Air resistance)
 	
 	var hDir:Horizontal = Direction.Right
-	private var speed_prv  = 0.04f
+	private var speed_prv  = 0.4f
 	
 	private var speedMod = 1f //calculated every update due to performance. Init value
 	
-	var maxhspd   = 0.25f
+	var maxhspd   = 6f
 	def maxhSpeed:Float=
 		if(onGround)
 			speedMod * maxhspd
@@ -58,16 +58,16 @@ abstract class Entity(pos:Position,body:Shape) extends Mass(pos,body) with Physi
 		hDir = dir
 		val spd =if(onGround)speed else	speed*airSpeedFactor
 		
-		if((math.abs(hspeed + spd*dir)) >= maxhSpeed && dir.toByte == Math.signum(hspeed)){
-			if (spd > (math.abs(hspeed + spd*dir)) - maxhSpeed)
-				hspeed = maxhSpeed * math.signum(hspeed)
+		if((math.abs(xMovement + spd*dir)) >= maxhSpeed && dir.toByte == Math.signum(xMovement)){
+			if (spd > (math.abs(xMovement + spd*dir)) - maxhSpeed)
+				xMovement = maxhSpeed * math.signum(xMovement)
 		}
-		else hspeed += spd*dir
+		else xMovement += spd*dir
 	}
 	
 	def jump(){
 		if(onGround)
-			vspeed -= jumpPower
+			yMovement -= jumpPower
 	}
 }
 

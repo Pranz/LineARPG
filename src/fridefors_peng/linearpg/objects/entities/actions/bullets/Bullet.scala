@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Mass, Physical, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Matter, Mass, Renderable, Alarm}
 import collection.mutable.ArrayBuffer
 import fridefors_peng.linearpg.objects.entities.Entity
 import lolirofle.gl2dlib.data.{Vector,NullVector}
@@ -14,7 +14,7 @@ import lolirofle.gl2dlib.data.Position
  */
 
 abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false) 
-		extends Mass(pos,bd) with Physical with Renderable{
+		extends Matter(pos,bd) with Mass with Renderable{
 	var gravity = 0 : Float
 	override val friction=0f
 	val firstPos = ent.position
