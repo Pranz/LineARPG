@@ -11,8 +11,7 @@ import fridefors_peng.linearpg.objects.entities.actions.Action
 class LineARPG extends Game {
 	var obj : Humanoid = null
 	var control : EntityControl = null
-	var dt = 1
-	var dt_rest : Int = 0
+	var dt = 0
 
 	def init(container: GameContainer): Unit = {
 		obj = new Humanoid(Vector(100, 250))
@@ -25,13 +24,10 @@ class LineARPG extends Game {
 		initFonts
 	}
 
-	def update(container: GameContainer, t: Int): Unit = {
-		var time = t
-		while(time + dt_rest > dt){
-			(GameObject list).clone foreach (_ update(dt))
-			time -= dt
-		}
-		dt_rest = time
+	def update(container: GameContainer, delta_t: Int): Unit = {
+		dt = delta_t
+		(GameObject list).clone foreach (_ update(dt))
+		
 	}
 
 	def render(container: GameContainer, g: Graphics): Unit = {
@@ -80,7 +76,7 @@ class LineARPG extends Game {
 			"relative x: "+ obj.prvRelativeObject.movement.x,
 			"relative y: "+ obj.prvRelativeObject.movement.y,
 			"selected action: "+ optionActionName(obj.fAction(control.curAction)),
-			"FPS: " + gc.getFPS()
+			"FPS: " + dt
 		) 
 	}
 }
