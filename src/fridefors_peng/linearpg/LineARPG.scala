@@ -11,25 +11,27 @@ import fridefors_peng.linearpg.objects.entities.actions.Action
 class LineARPG extends Game {
 	var obj : Humanoid = null
 	var control : EntityControl = null
-	var dt : Int = 0
+	var dt = 1
+	var dt_rest : Int = 0
 
 	def init(container: GameContainer): Unit = {
 		obj = new Humanoid(Vector(100, 250))
 		Main.input = container.getInput
 		new Block(Vector(100, 500), 50, 2)
 		new Block(Vector(600, 200), 2, 50)
-		new PhysicalBlock(Vector(360, 450), 6, 2)
+		new PhysicalBlock(Vector(360, 380), 6, 2)
 		control = new EntityControl(obj, 0)
 		new MetaGameController(0)
 		initFonts
 	}
 
-	def update(container: GameContainer, delta_t: Int): Unit = {
-		dt = {
-			if (delta_t > 100) 100
-			else delta_t
+	def update(container: GameContainer, t: Int): Unit = {
+		var time = t
+		while(time + dt_rest > dt){
+			(GameObject list).clone foreach (_ update(dt))
+			time -= dt
 		}
-		(GameObject list).clone foreach (_ update(dt))
+		dt_rest = time
 	}
 
 	def render(container: GameContainer, g: Graphics): Unit = {
@@ -37,7 +39,7 @@ class LineARPG extends Game {
 		g.translate(-Main.Camera.x,-Main.Camera.y)
 			(Renderable list) foreach (_.draw(g))
 		g.translate( Main.Camera.x, Main.Camera.y)
-		Main.drawList(("fps: " + container.getFPS)::debugList, g)
+		Main.drawList(("fps: " + container.getFPS)::debugList(container), g)
 	}
 
 	def closeRequested(): Boolean = true
@@ -56,7 +58,7 @@ class LineARPG extends Game {
 		
 	}
 		
-	def debugList:List[String] = {
+	def debugList(gc : GameContainer):List[String] = {
 		def optionActionName(maybeA : Option[Action]) : String = maybeA match {
 			case Some(action) => action.name
 			case _            => "No action"
@@ -78,7 +80,7 @@ class LineARPG extends Game {
 			"relative x: "+ obj.prvRelativeObject.movement.x,
 			"relative y: "+ obj.prvRelativeObject.movement.y,
 			"selected action: "+ optionActionName(obj.fAction(control.curAction)),
-			"dt: " + dt
+			"FPS: " + gc.getFPS()
 		) 
 	}
 }

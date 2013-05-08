@@ -35,7 +35,7 @@ class Console extends Renderable {
 				g.setColor(Color.white)
 		}}
 	}
-	def sendMsg() : Unit = if(msg != "") {
+	def sendMsg() : Unit = if(msg != "") { 
 		addHistory(msg)
 		val(command :: flags) = msg.split(regexSplit).toList
 		if(command.first == commandPrefix) commands.foreach{case (cmdName, _, f) => {
