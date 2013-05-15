@@ -1,24 +1,21 @@
 package fridefors_peng.linearpg.input
 
-import org.newdawn.slick.Input
 import fridefors_peng.linearpg.objects.entities.Entity
-import fridefors_peng.linearpg.Main
 import fridefors_peng.linearpg.objects.Timer
+import lolirofle.gl2dlib.GameHandler
+import lolirofle.gl2dlib.data.Direction
 
 /**
  * Controls any entity. General and thus final.
  */
 
-final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
-	
+final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID){
 	var curAction = 0
-	val reverseKeyMap = keyMap.map(_ swap).withDefaultValue(-1)
+	val reverseKeyMap = keyMap.map(_.swap).withDefaultValue(-1)
 
-	def handleKeys(input: Input): Unit = {
-		if (input.isKeyDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Entity.LEFT)
-		if (input.isKeyDown(keyMap(Control.Key.MOVE_RIGHT))) ent.run(Entity.RIGHT)
-		if (input.isKeyDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {
-			case Some(action) => action whileClicked
+	override def update(delta:Int){
+		if(GameHandler.keyIsDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {
+			case Some(action) => action.whileClicked
 			case None         => {}
 		}
 	}
@@ -33,12 +30,13 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	def expects(actionID:Int) =
 		actionID == exp
 	
-	def keyPressed(key:Int, keyChar:Char){
+	override def keyPressed(key:Int){
 		
 		//get Control.Key enumeration value derived from Input.KEY int value
 		reverseKeyMap(key) match {
 			case Control.Key.JUMP   => ent.jump
-			case Control.Key.CROUCH => ent.addSpeedMod(0.5f)
+			case Control.Key.MOVE_LEFT=>{ent.turn(Direction.Left);ent.run(Direction.Left)}
+			case Control.Key.MOVE_RIGHT=>{ent.turn(Direction.Right);ent.run(Direction.Right)}
 			case Control.Key.PERFORM_ACTION => {
 				ent.fAction(curAction) match {
 					case Some(action) => {if(action.ready) action.onClick; expect(curAction);}
@@ -63,9 +61,20 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 		}
 		
 	}
-	def keyReleased(key:Int, keyChar:Char) =
+	override def keyReleased(key:Int) =
 		reverseKeyMap(key) match {
-			case Control.Key.CROUCH => ent.removeSpeedMod(0.5f)
+		case Control.Key.MOVE_RIGHT=>{
+				if(!GameHandler.keyIsDown(keyMap(Control.Key.MOVE_LEFT)))
+					ent.stand()
+				else
+					keyPressed(keyMap(Control.Key.MOVE_LEFT))
+			}
+			case Control.Key.MOVE_LEFT=>{
+				if(!GameHandler.keyIsDown(keyMap(Control.Key.MOVE_RIGHT)))
+					ent.stand()
+				else
+					keyPressed(keyMap(Control.Key.MOVE_RIGHT))
+			}
 			case Control.Key.PERFORM_ACTION => {
 				if (expects(curAction)){
 					ent.fAction(curAction) match {
@@ -77,5 +86,7 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 			case _ => {}
 		}
 	
-
+	override def keyChar(char:Char){
+		
+	}
 }

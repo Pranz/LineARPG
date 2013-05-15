@@ -1,31 +1,30 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Interactive, Physical, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable, Alarm}
 import collection.mutable.ArrayBuffer
 import fridefors_peng.linearpg.objects.entities.Entity
-import fridefors_peng.linearpg.{Vector, NullVector}
+import lolirofle.gl2dlib.data.{Vector,NullVector}
 import fridefors_peng.linearpg.terrain.Terrain
-import org.newdawn.slick.geom.Shape
-import org.newdawn.slick.Graphics
+import lolirofle.gl2dlib.geom.Shape
+import lolirofle.gl2dlib.data.Position
 
 /**
  * A bullet is a physical object which interacts with entities and possible terrain.
  * Main source for damage and debuffs. Set durability to -1 for infinite durability. 
  */
 
-abstract class Bullet(pos:Vector, bd:Shape, ent:Entity, relativePos:Boolean = false) 
-		extends Interactive(pos, bd) with Physical with Renderable {
-	
-	var gravity = 0 : Float
-	var acceleration = NullVector : Vector
+abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false) 
+		extends Interactable(pos,bd) with Matter with Renderable{
+	override val gravity=0f
+	override val friction=0f
 	val firstPos = ent.position
 	
 	var invulnerable_ents = ArrayBuffer(ent)
 	val invulnerable_time = -1
 	var durability : Int
 	
-	def draw(g:Graphics) {
-		g.draw(body)
+	def draw() {
+		body.at(position).draw
 	}
 	
 	def makeInvulnerable(ent:Entity) : Unit = {
@@ -35,18 +34,18 @@ abstract class Bullet(pos:Vector, bd:Shape, ent:Entity, relativePos:Boolean = fa
 	
 	override def update(delta:Int) {
 		//Loop through all collision of ents, filter out those who are invulnerable
-		(allPlaceMeetingList(pos.x,pos.y, Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
+		(placeMeetings(position,Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
 			ent => {
 				durability -= 1
 				if (durability == 0) destroy
 				interactWithEnt(ent)
 				makeInvulnerable(ent)
 			})
-		interactWithTerrain(placeMeetingList(pos.x, pos.y, Terrain.list))
+		interactWithTerrain(placeMeeting(position,Terrain.list))
 		
 		super.update(delta)
 		if(relativePos){
-			position += Vector(ent.deltaPos.x, ent.deltaPos.y)
+			position += Vector(ent.deltaPosition.x, ent.deltaPosition.y)
 		}
 		
 		

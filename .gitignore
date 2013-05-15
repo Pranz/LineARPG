@@ -22,6 +22,8 @@
 # Merge files
 *.orig
 
+.cache
+
 bin/*
 lib/*
 .settings/*

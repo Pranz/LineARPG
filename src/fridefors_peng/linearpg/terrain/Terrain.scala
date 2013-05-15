@@ -1,23 +1,22 @@
 package fridefors_peng.linearpg.terrain
 
-import fridefors_peng.linearpg.objects.{Interactive, Renderable}
-import fridefors_peng.linearpg.Vector
-import org.newdawn.slick.geom.Shape
-import org.newdawn.slick.Graphics
+import fridefors_peng.linearpg.objects.{Interactable, Renderable}
+import lolirofle.gl2dlib.data.Vector
+import lolirofle.gl2dlib.geom.Shape
+import lolirofle.gl2dlib.data.Position
+
 /**
  * Any solid Interactive object.
  */
-abstract class Terrain(pos:Vector, bd:Shape) extends Interactive(pos, bd) with Renderable{
-	
-	(Terrain list) += this
-	solid = true
-	def draw(g:Graphics) {
-		g.draw(body)
+class Terrain(pos:Position,bd:Shape) extends Interactable(pos,bd) with Renderable{	
+	Terrain.list += this
+	def draw(){
+		body.at(position).draw
 	}
 	
 	override def destroy {
 		super.destroy
-		(Terrain list) -= this
+		Terrain.list -= this
 	}
 }
 

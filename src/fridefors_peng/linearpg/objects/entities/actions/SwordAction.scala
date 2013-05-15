@@ -14,5 +14,5 @@ class SwordAction(ent:Entity) extends SingleAction(ent) {
 		new SwordBullet(ent.position, ent)
 	}
 
-	def then(): Unit = {}
+	def thenAction(): Unit = {}
 }

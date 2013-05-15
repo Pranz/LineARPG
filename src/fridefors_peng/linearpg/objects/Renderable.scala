@@ -1,21 +1,21 @@
 package fridefors_peng.linearpg.objects
-import org.newdawn.slick.Graphics
+
+import collection.mutable.ArrayBuffer
 
 /**
- * Simple trait. Any object that implements this must define a draw function, which takes a single slick.Graphics argument.
+ * Simple trait. Any object that implements this must define a draw function
  */
-
 trait Renderable extends GameObject {
-	(Renderable list) += this
+	Renderable.list += this
 
-	def draw(g:Graphics):Unit
+	def draw():Unit
 
 	override def destroy{
-		(Renderable list) -= this
+		Renderable.list -= this
 		super.destroy
 	}
 }
 
 object Renderable {
-	val list: collection.mutable.ArrayBuffer[Renderable] = collection.mutable.ArrayBuffer()
+	val list:ArrayBuffer[Renderable]=ArrayBuffer()
 }

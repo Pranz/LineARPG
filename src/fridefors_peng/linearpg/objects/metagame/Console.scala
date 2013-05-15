@@ -2,9 +2,10 @@ package fridefors_peng.linearpg.objects.metagame
 
 import fridefors_peng.linearpg.objects.Renderable
 import fridefors_peng.linearpg.Main
-import org.newdawn.slick.{Graphics, Font, TrueTypeFont, Color}
 import collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
+import lolirofle.gl2dlib.gl.GLDraw
+import lolirofle.gl2dlib.graphics.Color
 
 class Console extends Renderable {
 	
@@ -25,26 +26,26 @@ class Console extends Renderable {
 			}),
 			("echo", "echoes every argument on a seperate line", _.foreach{(str) => addHistory(str)})
 	)
-	def draw(g : Graphics) : Unit = {
+	override def draw(){
 		(if(isOn)
 			(">" + msg :: history.take(maxHistory)).zip(0 :: alphaHistory)
 			else history.take(maxHistory).zip(alphaHistory)
 			).zipWithIndex.foreach{case ((str, alphaTime), i) => {
-				g.setColor(new Color(255,255,255, 255 - 255 * alphaTime/fadeTime))
-				g.drawString(str, 16, Main.HEIGHT - 32 - 18*i)
-				g.setColor(Color.white)
+				GLDraw.color=Color(255,255,255, 255 - 255 * alphaTime/fadeTime)
+				GLDraw.font.drawString(16, 640 - 32 - 18*i,str)//TODO: General way to get height of window instead of constant (640), maybe through parameters in draw. A display
+				GLDraw.color=Color.WHITE
 		}}
 	}
 	def sendMsg() : Unit = if(msg != "") { 
 		addHistory(msg)
 		val(command :: flags) = msg.split(regexSplit).toList
-		if(command.first == commandPrefix) commands.foreach{case (cmdName, _, f) => {
+		if(command.head == commandPrefix) commands.foreach{case (cmdName, _, f) => {
 			if(cmdName == command.tail) f(flags)
 		}}
 		msg = ""
 	}
-	def update(dt : Int) : Unit = {
-		alphaHistory = alphaHistory.map(_ + dt)
+	override def update(delta:Int):Unit = {
+		alphaHistory = alphaHistory.map(_+delta)
 	}
 	def addCommand(cmd : (String, String, (List[String] => Unit))) : Unit = commands += cmd
 	def addHistory(str : String) : Unit = {

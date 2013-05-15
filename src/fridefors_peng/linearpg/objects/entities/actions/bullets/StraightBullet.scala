@@ -1,16 +1,16 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Interactive, Physical, Renderable}
+import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable}
 import fridefors_peng.linearpg.objects.entities.Entity
-import fridefors_peng.linearpg.{Vector, NullVector}
+import lolirofle.gl2dlib.data.{Vector, NullVector}
 import fridefors_peng.linearpg.terrain.Terrain
-import org.newdawn.slick.geom.Circle
-import org.newdawn.slick.Graphics
+import lolirofle.gl2dlib.geom.Circle
 import fridefors_peng.linearpg.objects.Alarm
+import lolirofle.gl2dlib.data.Position
 
-class StraightBullet(pos:Vector, speed:Float, ent:Entity) extends Bullet(pos, new Circle(0,0, 10), ent) {
-	var movement = Vector(speed * ent.hDir, 0)
-	gravity  = 0f
+class StraightBullet(pos:Position, speed:Float, ent:Entity) extends Bullet(pos,Circle(2),ent) {
+	force = Vector(speed * ent.facingDir, 0)
+	override val gravity=0f
 
 	new Alarm(1000, () => this.destroy)
 	
