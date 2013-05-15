@@ -9,6 +9,7 @@ case object Point extends RegularPolygon{//TODO: Zero-dimensional? Line to be on
 	override val width=1f
 	override val height=1f
 	override val vertices=List(Position(0,0));
+	override val midpoint=Position(0.5f,0.5f)
 	
 	override def draw(x:Float,y:Float,filled:Boolean){
 		GLDraw.drawPoint(x,y)

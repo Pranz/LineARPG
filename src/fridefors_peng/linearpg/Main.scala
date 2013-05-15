@@ -16,15 +16,11 @@ object Main{
 			game=new LineARPGame()
 			
 			GameHandler.init(game,"Test",displayWidth=1024,displayHeight=756);
-			game.title="LineARPG"
-			game.FPS=60
 			GameHandler.start();
 		}while(restart);
 	}
 	
-	def drawList(x:Float,y:Float,list:List[String]) {
-		for (i <- 0 to list.size-1){
-			DefaultFont.font.drawString(x,y+16*i,list(i))
-		}
+	def drawStrings(x:Float,y:Float,list:Seq[String]){
+		list.view.zipWithIndex.foreach{case(str,i)=>DefaultFont.font.drawString(x,y+16*i,str)}
 	}
 }

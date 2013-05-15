@@ -9,10 +9,11 @@ object Polygon{
 	def apply(points:Seq[Position])=new Polygon{
 		override def sides=vertices.size
 		var vertices=points
-		override val width=0f
+		override val width=0f//TODO: 
 		override val height=0f
 		override val perimeter=0f
 		override val area=0f
+		override val midpoint=Position(0,0)
 	}
 }
 

@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Matter, Mass, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable, Alarm}
 import collection.mutable.ArrayBuffer
 import fridefors_peng.linearpg.objects.entities.Entity
 import lolirofle.gl2dlib.data.{Vector,NullVector}
@@ -14,8 +14,8 @@ import lolirofle.gl2dlib.data.Position
  */
 
 abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false) 
-		extends Matter(pos,bd) with Mass with Renderable{
-	var gravity = 0 : Float
+		extends Interactable(pos,bd) with Matter with Renderable{
+	override val gravity=0f
 	override val friction=0f
 	val firstPos = ent.position
 	
@@ -34,7 +34,7 @@ abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false
 	
 	override def update(delta:Int) {
 		//Loop through all collision of ents, filter out those who are invulnerable
-		(allPlaceMeeting(position,Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
+		(placeMeetings(position,Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
 			ent => {
 				durability -= 1
 				if (durability == 0) destroy
@@ -45,7 +45,7 @@ abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false
 		
 		super.update(delta)
 		if(relativePos){
-			position += Vector(ent.deltaPos.x, ent.deltaPos.y)
+			position += Vector(ent.deltaPosition.x, ent.deltaPosition.y)
 		}
 		
 		

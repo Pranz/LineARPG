@@ -10,31 +10,57 @@ import lolirofle.gl2dlib.graphics.text.DefaultFont
 import lolirofle.gl2dlib.data.Vector
 import lolirofle.gl2dlib.data.Position
 import org.lwjgl.input.Keyboard
+import lolirofle.gl2dlib.data.Horizontal
+import lolirofle.gl2dlib.data.Direction
 
 class LineARPGame() extends Game{
-	var shouldExit=false
+	title="LineARPG"
+	FPS=60
 	
-	var obj:Humanoid = new Humanoid(Position(100, 250))
+	private var shouldExit=false
+	
+	/**
+	 * It will and should only be used for the debug display 
+	 */
+	private var currentDelta=0
+	
+	var obj:Humanoid = new Humanoid(Position(100, 250)){
+		override val mass=0.5f
+	}
 	var control:EntityControl = new EntityControl(obj,0)
 	
 	new Block(Position(100, 500), 50, 2)
 	new Block(Position(600, 400), 1, 6)
 	new Block(Position(200, 450), 1, 2)
 	new Block(Position(0, 600), 5, 1)
-	new PhysicalBlock(Position(360, 450), 6, 2){
-		xMovement=1f;		
-		new Alarm(60,()=>{xMovement = -xMovement},true)
+	new PhysicalBlock(Position(360, 450), 6, 2){//TODO: ImmovableMass that extends Mass
+		var dir:Horizontal=Direction.Left
+		new Alarm(1000,()=>{
+			if(dir==Direction.Left)dir=Direction.Right else	dir=Direction.Left
+		},true)
+		
+		override def acceleration=Vector(0.001f*dir.toByte,0)
+		
+		override def accelerationModifier(acceleration:Vector,delta:Int)={
+			val newVel=velocity.x+acceleration.x*delta
+			if(newVel<0.1f && newVel> -0.1f)
+				acceleration*delta
+			else
+				Vector(0.1f*dir.toByte-newVel,acceleration.y*delta)
+		}
 	}
 	
 	new Humanoid(Position(260, 40))
+	new Humanoid(Position(267, -100))
 	
 	override def onUpdate(delta:Int){
-		GameObject.list.clone foreach (_ update(1))
+		currentDelta=delta
+		GameObject.list.clone foreach (_ update(delta))
 	}
 
 	override def onRender{
 		Renderable.list.foreach(_.draw())
-		Main.drawList(4,4,("FPS: "+FPS)::debugList)
+		Main.drawStrings(4,4,debugList)
 	}
 	override def onClose{}
 	override def onWindowResize(width:Int,height:Int,fullscreen:Boolean){}
@@ -65,13 +91,14 @@ class LineARPGame() extends Game{
 	
 	def debugList:List[String] = {
 		List(
+			"FPS: "       + FPS,
+			"Delta: "     + currentDelta   + " ms/update",
 			"x: "         + obj.position.x,
 			"y: "         + obj.position.y,
-			"deltaX: "        + obj.deltaPos.x,
-			"deltaY: "        + obj.deltaPos.y,
-			"xMovement: "	      + obj.xMovement,
-			"yMovement: "       + obj.yMovement,
-			"Velocity: "  + obj.velocity,
+			"deltaX: "    + obj.deltaPosition.x + " px/update",
+			"deltaY: "    + obj.deltaPosition.y + " px/update",
+			"xVelocity: " + obj.velocity.x  + " px/ms",
+			"yVelocity: " + obj.velocity.y  + " px/ms",
 			"Selected Action: "+ (
 					obj.fAction(control.curAction)match {
 						case Some(action) => action.name

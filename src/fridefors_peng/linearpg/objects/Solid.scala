@@ -2,7 +2,7 @@ package fridefors_peng.linearpg.objects
 
 import scala.collection.mutable.ArrayBuffer
 
-trait Solid extends Matter{
+trait Solid extends Interactable{
 	Solid.list+=Solid.this
 	
 	override def destroy{

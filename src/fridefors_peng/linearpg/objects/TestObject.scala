@@ -4,10 +4,10 @@ import lolirofle.gl2dlib.data.Vector
 import lolirofle.gl2dlib.geom.Shape
 import lolirofle.gl2dlib.data.Position
 
-class TestObject(pos:Position,body:Shape) extends Matter(pos,body) with Renderable with Mass{
-	var gravity      = .0f
-	movement     = Vector(2, 1.8f)
-	acceleration = Vector(0,0)
+class TestObject(pos:Position,body:Shape) extends Interactable(pos,body) with Renderable with Matter{
+	override val gravity=0f
+	force     = Vector(2, 1.8f)
+	override val acceleration = Vector(0,0)
 	override val friction     = 0.02f
 
 	def draw(): Unit = {

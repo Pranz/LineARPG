@@ -14,12 +14,10 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 	val reverseKeyMap = keyMap.map(_.swap)
 
 	override def update(delta:Int){
-		if (GameHandler.keyIsDown(keyMap(Control.Key.MOVE_LEFT)))  ent.run(Direction.Left)
-		if (GameHandler.keyIsDown(keyMap(Control.Key.MOVE_RIGHT))) ent.run(Direction.Right)
-		if (GameHandler.keyIsDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {
+		if(GameHandler.keyIsDown(keyMap(Control.Key.PERFORM_ACTION))) ent.fAction(curAction) match {
 			case Some(action) => action.whileClicked
 			case None         => {}
-		}
+		}			
 	}
 	
 	/*
@@ -40,8 +38,9 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 			else -1
 
 		key_ match {
-			case Control.Key.JUMP   => ent.jump
-			case Control.Key.CROUCH => ent.addSpeedMod(0.5f)
+			case Control.Key.JUMP   => ent.jump()
+			case Control.Key.MOVE_LEFT=>{ent.turn(Direction.Left);ent.run(Direction.Left)}
+			case Control.Key.MOVE_RIGHT=>{ent.turn(Direction.Right);ent.run(Direction.Right)}
 			case Control.Key.PERFORM_ACTION => {
 				ent.fAction(curAction) match {
 					case Some(action) => {if(action.ready) action.onClick; expect(curAction);}
@@ -71,7 +70,18 @@ final class EntityControl(ent:Entity, playerID:Int) extends Control(playerID) {
 			reverseKeyMap(key)
 			else -1
 		key_ match {
-			case Control.Key.CROUCH => ent.removeSpeedMod(0.5f)
+			case Control.Key.MOVE_RIGHT=>{
+				if(!GameHandler.keyIsDown(keyMap(Control.Key.MOVE_LEFT)))
+					ent.stand()
+				else
+					keyPressed(keyMap(Control.Key.MOVE_LEFT))
+			}
+			case Control.Key.MOVE_LEFT=>{
+				if(!GameHandler.keyIsDown(keyMap(Control.Key.MOVE_RIGHT)))
+					ent.stand()
+				else
+					keyPressed(keyMap(Control.Key.MOVE_RIGHT))
+			}
 			case Control.Key.PERFORM_ACTION => {
 				if (expects(curAction)){
 					ent.fAction(curAction) match {

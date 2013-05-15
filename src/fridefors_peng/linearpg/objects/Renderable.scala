@@ -1,9 +1,10 @@
 package fridefors_peng.linearpg.objects
 
-/**
- * Simple trait. Any object that implements this must define a draw function, which takes a single slick.Graphics argument.
- */
+import collection.mutable.ArrayBuffer
 
+/**
+ * Simple trait. Any object that implements this must define a draw function
+ */
 trait Renderable extends GameObject {
 	Renderable.list += this
 
@@ -16,5 +17,5 @@ trait Renderable extends GameObject {
 }
 
 object Renderable {
-	val list: collection.mutable.ArrayBuffer[Renderable] = collection.mutable.ArrayBuffer()
+	val list:ArrayBuffer[Renderable]=ArrayBuffer()
 }

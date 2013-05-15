@@ -8,6 +8,7 @@ trait Shape extends Drawable{
 	def area:Float;
 	def draw(){draw(0,0,false);}
 	def draw(x:Float,y:Float,filled:Boolean);
+	def midpoint:Position
 	
 	//When rotation and flipping are accepted
 	def isCongruent(p:Polygon){}//TODO

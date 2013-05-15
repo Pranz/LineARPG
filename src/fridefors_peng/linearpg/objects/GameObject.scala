@@ -16,7 +16,6 @@ trait GameObject {
 		}
 	}
 	
-
 	/**
 	 * @param delta Time since last update in milliseconds (ms)
 	 */
@@ -24,5 +23,6 @@ trait GameObject {
 }
 
 object GameObject{
+	//TODO: State/World specific lists
 	val list: ArrayBuffer[GameObject] = ArrayBuffer()
 }

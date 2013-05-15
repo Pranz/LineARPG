@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.terrain
 
-import fridefors_peng.linearpg.objects.Matter
+import fridefors_peng.linearpg.objects.Interactable
 import lolirofle.gl2dlib.data.Vector
 import lolirofle.gl2dlib.geom.Rectangle
 import fridefors_peng.linearpg.Main

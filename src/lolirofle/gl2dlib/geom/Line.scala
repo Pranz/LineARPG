@@ -15,6 +15,7 @@ case class Line(var x:Float,var y:Float) extends RegularPolygon{
 
 	override def width=math.abs(x);
 	override def height=math.abs(y);
+	override def midpoint=Position(x*0.5f,y*0.5f)
 	
 	/*def intersects(line:Line):Boolean={
 		val xDif=x2-x1;

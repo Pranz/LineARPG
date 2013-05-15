@@ -19,4 +19,6 @@ trait Tetragon extends Polygon{
 	override def draw(x:Float,y:Float,filled:Boolean){
 		GLDraw.drawRectangle(x,y,x+width,y+height,filled)
 	}
+	
+	override def midpoint=Position(width*0.5f,height*0.5f)
 }

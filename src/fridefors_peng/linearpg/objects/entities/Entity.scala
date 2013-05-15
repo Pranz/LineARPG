@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities
 
-import fridefors_peng.linearpg.objects.{Mass, Matter, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Matter, Interactable, Renderable, Alarm}
 import fridefors_peng.linearpg.objects.entities.actions.Action
 import lolirofle.gl2dlib.data.Vector
 import lolirofle.gl2dlib.geom.Shape
@@ -14,60 +14,58 @@ import lolirofle.gl2dlib.data.NullVector
  * The Entity class. This is any unit in the game world, and can be player or AI controlled.
  * 
  */
-abstract class Entity(pos:Position,body:Shape) extends Matter(pos,body) with Mass with Renderable{
+abstract class Entity(pos:Position,body:Shape) extends Interactable(pos,body) with Matter with Renderable{
 	Entity.list += this
 	
+	private var isRunning=false
+	
 	def airSpeedFactor:Float
-	def jumpPower:Float
+	def jumpForce:Vector
 	
 	val fAction = new Array[Option[Action]](10) map {_ => None : Option[Action]}
 	
-	override val gravity = 0.2f //TODO: "Gravity" value based on shape of body (Air resistance)
+	var facingDir:Horizontal = Direction.Right
+	var movingDir:Horizontal = Direction.Right
 	
-	var hDir:Horizontal = Direction.Right
-	private var speed_prv  = 0.4f
+	private var runningForce=Vector(0.0015f,0)
 	
-	private var speedMod = 1f //calculated every update due to performance. Init value
-	
-	var maxhspd   = 6f
+	var maxhspd   = 0.2f
 	def maxhSpeed:Float=
 		if(onGround)
-			speedMod * maxhspd
+			maxhspd
 		else
-			speedMod * maxhspd * airSpeedFactor*2
+			maxhspd * airSpeedFactor*2
 	
-	def speed = speedMod * speed_prv
-	def speed_=(value:Float):Unit = {
-		speed_prv = value
+	override def draw(){
+		(body at position).draw
 	}
 	
-	def addSpeedMod(spd:Float, duration:Int = -1) {//TODO: Make this safer, and not with lists. Now we could remove the speedMod anytime we want and all the values would be messed up
-		speedMod *= spd
-		new Alarm(duration, () => removeSpeedMod(spd))
+	def turn(dir:Horizontal){
+		facingDir=dir
 	}
 	
-	def removeSpeedMod(spd:Float){
-		speedMod /= spd
+	def run(dir:Horizontal=facingDir){
+		isRunning=true
+		movingDir=dir
 	}
 	
-	def draw(){
-		body.at(position).draw
-	}
-	
-	def run(dir:Horizontal) {
-		hDir = dir
-		val spd =if(onGround)speed else	speed*airSpeedFactor
-		
-		if((math.abs(xMovement + spd*dir)) >= maxhSpeed && dir.toByte == Math.signum(xMovement)){
-			if (spd > (math.abs(xMovement + spd*dir)) - maxhSpeed)
-				xMovement = maxhSpeed * math.signum(xMovement)
-		}
-		else xMovement += spd*dir
+	def stand(){
+		isRunning=false
 	}
 	
 	def jump(){
-		if(onGround)
-			yMovement -= jumpPower
+		if(onGround)//TODO: Movement modifier method with custom elasticity
+			_velocity-=jumpForce//TODO: Should use forces and not change velocity directly
+	}
+	
+	override def update(delta:Int){
+		if(isRunning){
+			val forceNew=force+(if(onGround)runningForce else runningForce*airSpeedFactor)*movingDir.toByte
+			
+			if(velocity.x*movingDir<maxhSpeed)
+				force=forceNew
+		}
+		super.update(delta)
 	}
 }
 
