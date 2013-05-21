@@ -1,6 +1,7 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable}
+import fridefors_peng.linearpg.timing.Alarm
 import collection.mutable.ArrayBuffer
 import fridefors_peng.linearpg.objects.entities.Entity
 import lolirofle.gl2dlib.data.{Vector,NullVector}
@@ -23,8 +24,8 @@ abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false
 	val invulnerable_time = -1
 	var durability : Int
 	
-	def draw() {
-		body.at(position).draw
+	def draw(){
+		(body at position).draw
 	}
 	
 	def makeInvulnerable(ent:Entity) : Unit = {
@@ -37,7 +38,7 @@ abstract class Bullet(pos:Position,bd:Shape,ent:Entity,relativePos:Boolean=false
 		(placeMeetings(position,Entity.list).filter {!invulnerable_ents.contains(_)}).foreach(
 			ent => {
 				durability -= 1
-				if (durability == 0) destroy
+				if (durability == 0) onDestroy
 				interactWithEnt(ent)
 				makeInvulnerable(ent)
 			})

@@ -12,22 +12,32 @@ import lolirofle.gl2dlib.data.Position
 import org.lwjgl.input.Keyboard
 import lolirofle.gl2dlib.data.Horizontal
 import lolirofle.gl2dlib.data.Direction
+import scala.collection.mutable.Buffer
+import lolirofle.gl2dlib.GameHandler
+import fridefors_peng.linearpg.console.Console
+import fridefors_peng.linearpg.objects.Updatable
+import fridefors_peng.linearpg.timing.Alarm
+import lolirofle.gl2dlib.gl.GLDraw
+import fridefors_peng.linearpg.camera._
 
-class LineARPGame() extends Game{
+class LineARPGame() extends Game with InputRelated{
 	title="LineARPG"
 	FPS=60
-	
+
 	private var shouldExit=false
 	
 	/**
-	 * It will and should only be used for the debug display 
+	 * currentDelta is and should only be used for the debug display 
 	 */
 	private var currentDelta=0
 	
 	var obj:Humanoid = new Humanoid(Position(100, 250)){
 		//override val mass=0.5f //TODO: Fix so gravitation will affect matter with different mass correctly
 	}
-	var control:Control = new EntityControl(obj,0)
+	
+	var control:Control=new GameControl(new EntityControl(obj,0))
+	
+	var camera:Camera=SimpleInteractableStalkerCamera(obj)
 	
 	new Block(Position(100, 500), 50, 2)
 	new Block(Position(600, 400), 1, 6)
@@ -55,38 +65,59 @@ class LineARPGame() extends Game{
 	
 	override def onUpdate(delta:Int){
 		currentDelta=delta
-		GameObject.list.clone foreach (_ update(delta))
+		control.handleInput(this)
+		Updatable.list.clone foreach (_ update(delta))
 	}
 
 	override def onRender{
-		Renderable.list.foreach(_.draw())
+		GLDraw.offset_=(-camera.x(Main.WIDTH),-camera.y((Main.HEIGHT)))
+			Renderable.list.foreach(_.draw())
+		GLDraw.offset_=(camera.x(Main.WIDTH),camera.y(Main.HEIGHT))
+		
+		GUIRenderable.list.foreach(_.draw())
+		
 		Main.drawStrings(4,4,debugList)
 	}
 	override def onClose{}
 	override def onWindowResize(width:Int,height:Int,fullscreen:Boolean){}
+	
+	val actionKeysDown=Buffer[ControlKey]()
+	override def keyIsDown(key:ControlKey)=actionKeysDown.exists(_==key)
+	override def keyIsDown(key:Int)=GameHandler.keyIsDown(key)
+	
 	override def onKeyEvent(key:Int,state:Boolean){
-		if(state){
-			if(key==Keyboard.KEY_ESCAPE)
-				close()
-			else if(key==Keyboard.KEY_R)
-				reset();
-			else
-				control.keyPressed(key)
+		val keyAction=Control.getMappedKey(key) match{
+			case None=>null
+			case Some(key)=>key
 		}
-		else
-			control.keyReleased(key)
+		
+		if(state){
+			control.onKeyPressed(this,key)
+			if(keyAction!=null){
+				control.onKeyPressed(this,keyAction)
+				actionKeysDown+=keyAction
+			}
+		}
+		else{
+			control.onKeyReleased(this,key)
+			if(keyAction!=null){
+				control.onKeyReleased(this,keyAction)
+				actionKeysDown-=keyAction
+			}
+		}
 	}
+	
 	override def onKeyCharEvent(chr:Char){
-		control.keyChar(chr)
+		control.onKeyChar(chr)
 	}
 
 	override def isCloseRequested=shouldExit
 
-	def close(){
+	override def close(){
 		shouldExit=true
 	}
 	
-	def reset(){//TODO: All the global lists containing objects won't reset 
+	override def reset(){//TODO: All the global lists containing objects won't reset 
 		Main.restart=true;
 		close();
 	}

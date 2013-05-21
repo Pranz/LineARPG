@@ -9,7 +9,7 @@ import lolirofle.gl2dlib.data.NullVector
 /**
  * Any object that has a position and a body
  */
-abstract class Interactable(var position:Position, var body:Shape) extends GameObject {
+abstract class Interactable(var position:Position, var body:Shape) extends GameObject with Updatable{
 	Interactable.list += Interactable.this
 	
 	/**
@@ -27,8 +27,8 @@ abstract class Interactable(var position:Position, var body:Shape) extends GameO
 		_previousPosition = position
 	}
 
-	override def destroy{
-		super.destroy
+	override def onDestroy{
+		super.onDestroy
 		Interactable.list -= Interactable.this
 	}
 	

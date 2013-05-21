@@ -2,7 +2,7 @@ package fridefors_peng.linearpg.objects.entities.actions
 
 import fridefors_peng.linearpg.objects.entities.Entity
 import fridefors_peng.linearpg.objects.entities.actions.bullets.StraightBullet
-import fridefors_peng.linearpg.objects.Alarm
+import fridefors_peng.linearpg.timing.Alarm
 
 class TestAction(ent:Entity) extends SingleAction(ent) {
 	val name = "Best Action"

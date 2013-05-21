@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities
 
-import fridefors_peng.linearpg.objects.{Matter, Interactable, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Matter, Interactable, Renderable}
 import fridefors_peng.linearpg.objects.entities.actions.Action
 import lolirofle.gl2dlib.data.Vector
 import lolirofle.gl2dlib.geom.Shape

@@ -3,9 +3,12 @@ import lolirofle.gl2dlib.graphics.text.DefaultFont
 import lolirofle.gl2dlib.Game
 import lolirofle.gl2dlib.GameHandler
 
-object Main{	
+object Main{
 	val TILE_SIZE = 16
 	var game:Game=null
+	
+	val WIDTH=1024//TODO: Better way of doing this
+	val HEIGHT=756
 	
 	var restart=false;
 	
@@ -15,12 +18,12 @@ object Main{
 			
 			game=new LineARPGame()
 			
-			GameHandler.init(game,"Test",displayWidth=1024,displayHeight=756);
+			GameHandler.init(game,"Test",displayWidth=WIDTH,displayHeight=HEIGHT);
 			GameHandler.start();
 		}while(restart);
 	}
 	
 	def drawStrings(x:Float,y:Float,list:Seq[String]){
-		list.view.zipWithIndex.foreach{case(str,i)=>DefaultFont.font.drawString(x,y+16*i,str)}
+		list.view.zipWithIndex.foreach{case(str,i)=>DefaultFont.drawString(x,y+16*i,str)}
 	}
 }

@@ -1,6 +1,6 @@
 package fridefors_peng.linearpg.objects.entities.actions
 
-import fridefors_peng.linearpg.objects.Alarm
+import fridefors_peng.linearpg.timing.Alarm
 import fridefors_peng.linearpg.objects.entities.Entity
 
 /**

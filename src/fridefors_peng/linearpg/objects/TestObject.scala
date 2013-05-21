@@ -11,7 +11,7 @@ class TestObject(pos:Position,body:Shape) extends Interactable(pos,body) with Re
 	override val friction     = 0.02f
 
 	def draw(): Unit = {
-		body.draw()
+		(body at position).draw
 	}
 
 	override def update(delta:Int): Unit = {

@@ -1,6 +1,7 @@
 package fridefors_peng.linearpg.objects.entities.actions.bullets
 
-import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable, Alarm}
+import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable}
+import fridefors_peng.linearpg.timing.Alarm
 import fridefors_peng.linearpg.objects.entities.Entity
 import lolirofle.gl2dlib.data.{Vector, NullVector}
 import fridefors_peng.linearpg.terrain.Terrain
@@ -17,5 +18,5 @@ class SwordBullet(pos:Position, ent:Entity) extends
 
 	force = Vector(0.001f*ent.facingDir,0)
 	new Alarm(200,()=>force = -force)
-	new Alarm(400, () => this.destroy)
+	new Alarm(400, () => this.onDestroy)
 }

@@ -5,8 +5,8 @@ import scala.collection.mutable.ArrayBuffer
 trait Solid extends Interactable{
 	Solid.list+=Solid.this
 	
-	override def destroy{
-		super.destroy
+	override def onDestroy{
+		super.onDestroy
 		Solid.list -= Solid.this
 	}
 }

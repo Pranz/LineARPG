@@ -7,6 +7,7 @@ import lolirofle.gl2dlib.graphics.Drawable
 
 class BitPointImage(val bits:Seq[Boolean],val bitWidth:Short) extends Drawable{
 	def this(data:Long,bitWidth:Short)=this(NumUtil.longToBits(data),bitWidth);
+	def this(data:Long,bitWidth:Int)=this(NumUtil.longToBits(data),bitWidth.toShort);
 	
 	def getPoint(x:Short,y:Short=0):Boolean=bits(x+y*bitWidth);
 	

@@ -92,6 +92,14 @@ object NumUtil {
 		return number;
 	}
 	
+	def limit(number:Double,min:Double,max:Double):Double={
+		if(number<min)
+			return min;
+		if(number>max)
+			return max;
+		return number;
+	}
+	
 	def limit(number:Float,min:Float,max:Float):Float={
 		if(number<min)
 			return min;

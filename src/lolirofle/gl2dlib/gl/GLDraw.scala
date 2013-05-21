@@ -66,7 +66,7 @@ object GLDraw{
 	def rotation=_rotation;
 	def lineWidth=GL11.glGetFloat(GL11.GL_LINE_WIDTH);
 	def color=_color
-	var font:Font=DefaultFont.font
+	var font:Font=DefaultFont
 
 	/**
 	 * @param rotation 0-360 degrees

@@ -9,6 +9,6 @@ import fridefors_peng.linearpg.terrain.ControllableBlock
  * this has control over, use controlledBlocks.foreach{ ... }
  */
 
-abstract class BlockController(playerID:Int, val blockID:Int) extends Control(playerID) {
+abstract class BlockController(playerID:Int, val blockID:Int) extends Control{
 	val controlledBlocks = ControllableBlock.getBlocksWithID(blockID)
 }

@@ -11,11 +11,11 @@ import lolirofle.gl2dlib.data.Position
 class Terrain(pos:Position,bd:Shape) extends Interactable(pos,bd) with Renderable{	
 	Terrain.list += this
 	def draw(){
-		body.at(position).draw
+		(body at position).draw
 	}
 	
-	override def destroy {
-		super.destroy
+	override def onDestroy {
+		super.onDestroy
 		Terrain.list -= this
 	}
 }

@@ -128,8 +128,8 @@ trait Matter extends Interactable{
 	def direction=velocity.direction
 	protected def direction_= (dir:Double){_velocity=_velocity.withDirection(dir)}
 	
-	override def destroy{
-		super.destroy
+	override def onDestroy{
+		super.onDestroy
 		Matter.list -= Matter.this
 	}
 

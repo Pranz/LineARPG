@@ -10,9 +10,9 @@ trait Renderable extends GameObject {
 
 	def draw():Unit
 
-	override def destroy{
+	override def onDestroy{
+		super.onDestroy
 		Renderable.list -= this
-		super.destroy
 	}
 }
 

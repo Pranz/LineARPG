@@ -1,8 +1,8 @@
 package lolirofle.gl2dlib.graphics.text
 
 trait Font{
-	def getWidthOf(str:String):Int;
-	def getHeightOf(str:String):Int;
+	def widthOf(str:String):Float;
+	def heightOf(str:String):Float;
 	def lineHeight:Int;
 	
 	/**
@@ -18,6 +18,9 @@ trait Font{
 	def size:Short;
 	def getCharsAllocated:Int;
 	def drawString(x:Float,y:Float,str:String);
-	//def drawString(g:Renderer,x:Float,y:Float,str:String,direction:Directional=LEFT,lengthWrap:Float=0);
-	//def drawStringFormatted(g:Renderer,x:Float,y:Float,str:String);
+	//def drawString(x:Float,y:Float,str:String,direction:Directional=LEFT,lengthWrap:Float=0);
+	/**
+	 * @param formattingFunc Applies function to each char in str. This can be used to replace char with strings and apply colours in the function for example
+	 */
+	//def drawStringFormatted(x:Float,y:Float,str:String,formattingFunc:Char=>String)//TODO:drawStringFormatted is needed in console
 }

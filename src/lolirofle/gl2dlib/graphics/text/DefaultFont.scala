@@ -6,10 +6,7 @@ import lolirofle.gl2dlib.graphics.rendered.{BitPointImage => BI}
 import lolirofle.gl2dlib.geom.{Rectangle,Line}
 import lolirofle.gl2dlib.data.Direction
 
-object DefaultFont{
-	implicit def Int2Short(int:Int):Short=int.toShort;
-	
-	lazy val font=new DrawablesFont("Default",8,10,IntMap[FontChar](
+object DefaultFont extends DrawablesFont("Default",8,10,IntMap[FontChar](
 			(0,new CDat(Rectangle(6f,8f))()),
 			(' ',new CSpa(5)),
 			('	',new CSpa(20)),
@@ -99,6 +96,5 @@ object DefaultFont{
 			('x',new CDat(new BI(628377,4))()),
 			('y',new CDat(new BI(75417,4))()),
 			('z',new CDat(new BI(988815,4))())
-	));
-	def get=font;
+	)){
 }

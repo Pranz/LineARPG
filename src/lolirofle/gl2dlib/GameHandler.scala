@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.LWJGLException
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard
-
+//TODO: Rename "lolirofle.gl2dlib" to "lolirofle" and ".graphics"/".gl" to "graphics2d"/gl2d
 object GameHandler{
 	private var fps:Int=0;
 	private var targetFPS:Int=60;
@@ -49,11 +49,12 @@ object GameHandler{
 	}
 
 	final def start(){
+		//Game Loop
 		while(!Display.isCloseRequested && !game.isCloseRequested){
 			//Input
 			if(Keyboard.isCreated)
 				while(Keyboard.next()){
-					if(Keyboard.getEventKeyState&&Keyboard.getEventCharacter!=0)
+					if(Keyboard.getEventKeyState&&Keyboard.getEventCharacter!=Keyboard.CHAR_NONE)
 						game.onKeyCharEvent(Keyboard.getEventCharacter);
 					if(!Keyboard.isRepeatEvent)
 						game.onKeyEvent(Keyboard.getEventKey(),Keyboard.getEventKeyState());

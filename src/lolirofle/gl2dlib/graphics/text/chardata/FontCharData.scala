@@ -19,8 +19,6 @@ class FontCharData[+T<:Drawable](val drawable:T)(override val xAdvance:Short=(dr
 				else
 					y
 		)
-		GL11.glTranslatef(dx,dy,0);
-		drawable.draw()
-		GL11.glTranslatef(-dx,-dy,0);
+		drawable.drawAt(dx,dy)
 	}
 }
