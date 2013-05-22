@@ -33,7 +33,7 @@ trait Vector{
  * Mathematical object, a 2-dimensional vector. 
  */
 case class PositionalVector(override val x:Float,override val y:Float) extends Vector{
-	override lazy val length=if(x==0)y else if(y==0)x else math.hypot(x,y)
+	override lazy val length=if(x==0)Math.abs(y) else if(y==0)Math.abs(x) else math.hypot(x,y)
 	override lazy val direction=math.atan2(x,y)
 	
 	override def +(v:Vector)= PositionalVector(x+v.x,y+v.y).asInstanceOf[this.type]
@@ -76,7 +76,7 @@ case class PositionalVector(override val x:Float,override val y:Float) extends V
 
 case class PolarVector(override val direction:Double,override val length:Double) extends Vector{
 	override lazy val x=(length*math.sin(direction)).toFloat
-	override lazy val y=(length*math.cos(direction)).toFloat
+ 	override lazy val y=(length*math.cos(direction)).toFloat
 	
 	override def +(v:Vector)= PolarVector(x+v.x,y+v.y).asInstanceOf[this.type]
 	override def -(v:Vector)= PolarVector(x-v.x,y-v.y).asInstanceOf[this.type]

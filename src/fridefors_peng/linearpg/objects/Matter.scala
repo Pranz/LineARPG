@@ -29,7 +29,7 @@ trait Matter extends Interactable{
 	 * http://en.wikipedia.org/wiki/Inelastic_collision#Formula
 	 * http://en.wikipedia.org/wiki/Elastic_collision#Equations
 	 * 
-	 * Range: 0 -> 1
+	 * Range: 0 > n > 1
 	 */
 	def elasticity:Float=0
 	
@@ -46,9 +46,9 @@ trait Matter extends Interactable{
 	//TODO: Friction based on surface of different objects. Currently this is the amount of friction that affects this object
 	def friction:Float=
 		if(onGround)
-			0.01f
+			0.0006f
 		else
-			0.001f
+			0.000006f
 	
 	/**
 	 * Weight
@@ -60,7 +60,7 @@ trait Matter extends Interactable{
 	 * 
 	 * Modifies position and it describes speed with a direction
 	 */
-	def velocity=_velocity
+	def velocity : Vector =_velocity
 	protected var _velocity:Vector=NullVector
 	
 	/**
@@ -78,21 +78,28 @@ trait Matter extends Interactable{
 	 */
 	var force:Vector=NullVector//TODO: Need a forcePerUpdate and a forcePerMs
 	
+	var relativeObject:Option[Matter] = None
+	var prvRelativeObject:Option[Matter] = None
+	/**
+	 * Relative object
+	 * The object you are standing on.
+	 */
+	
 	def processTime(time:Int){
 		//Apply acceleration to velocity
-		_velocity+=accelerationModifier(acceleration,time)
+		_velocity+=accelerationModifier(acceleration + Vector(0, gravity),time)
 		
 		force=NullVector
 		
 		//Apply friction to velocity
 		if(friction!=0){
-			val velWithFric=velocity.length-friction
+			val velWithFric=velocity.length - friction*time
 			if(velWithFric>=0)
 				_velocity=velocity.withLength(velWithFric)
 		}
 		
 		//Updates position according to velocity
-		position+=velocityModifier(velocity,time)
+		position+=velocityModifier(velocity + relativeObject.map(_.velocity).getOrElse(Vector(0,0)),time)
 	}
 	
 	override def exertForce(force:Vector,otherMass:Float):Vector={
@@ -106,10 +113,10 @@ trait Matter extends Interactable{
 	
 	override def update(delta:Int){
 		super.update(delta)
-		
-		force+=Vector(0,gravity)
-		
 		processTime(delta)
+		prvRelativeObject = relativeObject
+		relativeObject = placeMeeting(position.rightBelow, Matter.list)
+		if(relativeObject != prvRelativeObject)_velocity = _velocity + (prvRelativeObject.map(_.velocity).getOrElse(Vector(0,0))) - relativeObject.map(_.velocity).getOrElse(Vector(0,0))
 	}
 	
 	/**
