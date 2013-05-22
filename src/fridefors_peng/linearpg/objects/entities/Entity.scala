@@ -51,6 +51,7 @@ abstract class Entity(pos:Position,body:Shape) extends Interactable(pos,body) wi
 	
 	def stand(){
 		isRunning=false
+		movingDir = Direction.Center
 	}
 	
 	def jump(){
@@ -62,7 +63,7 @@ abstract class Entity(pos:Position,body:Shape) extends Interactable(pos,body) wi
 		if(isRunning){
 			val forceNew=force+(if(onGround)runningForce else runningForce*airSpeedFactor)*movingDir.toByte
 			
-			if(velocity.x*movingDir<maxhSpeed)
+			if(Math.abs(velocity.x)<maxhSpeed)
 				force=forceNew
 		}
 		super.update(delta)
