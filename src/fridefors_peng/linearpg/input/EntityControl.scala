@@ -2,8 +2,8 @@ package fridefors_peng.linearpg.input
 
 import fridefors_peng.linearpg.objects.entities.Entity
 import fridefors_peng.linearpg.timing.Timer
-import lolirofle.gl2dlib.GameHandler
-import lolirofle.gl2dlib.data.Direction
+import lolirofle.GameHandler
+import lolirofle.data.Direction
 
 /**
  * Controls any entity. General and thus final.

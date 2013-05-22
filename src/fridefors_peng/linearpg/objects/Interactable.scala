@@ -1,10 +1,10 @@
 package fridefors_peng.linearpg.objects
 
-import lolirofle.gl2dlib.data.Vector
+import lolirofle.data.Vector
 import collection.mutable.ArrayBuffer
-import lolirofle.gl2dlib.geom.Shape
-import lolirofle.gl2dlib.data.Position
-import lolirofle.gl2dlib.data.NullVector
+import lolirofle.geom.Shape
+import lolirofle.data.Position
+import lolirofle.data.NullVector
 
 /**
  * Any object that has a position and a body

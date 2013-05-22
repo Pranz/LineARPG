@@ -4,10 +4,10 @@ import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable}
 import fridefors_peng.linearpg.timing.Alarm
 import collection.mutable.ArrayBuffer
 import fridefors_peng.linearpg.objects.entities.Entity
-import lolirofle.gl2dlib.data.{Vector,NullVector}
+import lolirofle.data.{Vector,NullVector}
 import fridefors_peng.linearpg.terrain.Terrain
-import lolirofle.gl2dlib.geom.Shape
-import lolirofle.gl2dlib.data.Position
+import lolirofle.geom.Shape
+import lolirofle.data.Position
 
 /**
  * A bullet is a physical object which interacts with entities and possible terrain.

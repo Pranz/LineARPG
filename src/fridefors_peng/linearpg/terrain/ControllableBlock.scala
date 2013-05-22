@@ -1,7 +1,7 @@
 package fridefors_peng.linearpg.terrain
 
-import lolirofle.gl2dlib.data.Vector
-import lolirofle.gl2dlib.data.Position
+import lolirofle.data.Vector
+import lolirofle.data.Position
 
 /*
  * A block who is controlled by a BlockController object.

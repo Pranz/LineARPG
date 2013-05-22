@@ -3,17 +3,17 @@ package fridefors_peng.linearpg.console
 import fridefors_peng.linearpg.objects.GUIRenderable
 import collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
-import lolirofle.gl2dlib.gl.GLDraw
-import lolirofle.gl2dlib.graphics.Color
+import lolirofle.gl2d.GLDraw
+import lolirofle.graphics2d.Color
 import java.io.OutputStream
 import scala.collection.mutable.Queue
 import fridefors_peng.linearpg.input._
 import org.lwjgl.input.Keyboard
-import lolirofle.gl2dlib.util.MiscUtil
-import lolirofle.gl2dlib.GameHandler
-import lolirofle.gl2dlib.util.NumUtil
-import lolirofle.gl2dlib.geom.Rectangle
-import lolirofle.gl2dlib.data.Position
+import lolirofle.util.MiscUtil
+import lolirofle.GameHandler
+import lolirofle.util.NumUtil
+import lolirofle.geom.Rectangle
+import lolirofle.data.Position
 import fridefors_peng.linearpg.objects.Updatable
 
 case class ConsoleOutputLine(str:String,time:Long)

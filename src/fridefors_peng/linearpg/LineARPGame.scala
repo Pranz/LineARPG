@@ -5,19 +5,19 @@ import fridefors_peng.linearpg.input._
 import fridefors_peng.linearpg.objects.entities.Humanoid
 import fridefors_peng.linearpg.objects._
 import fridefors_peng.linearpg.objects.entities.actions.Action
-import lolirofle.gl2dlib.Game
-import lolirofle.gl2dlib.graphics.text.DefaultFont
-import lolirofle.gl2dlib.data.Vector
-import lolirofle.gl2dlib.data.Position
+import lolirofle.Game
+import lolirofle.graphics2d.text.DefaultFont
+import lolirofle.data.Vector
+import lolirofle.data.Position
 import org.lwjgl.input.Keyboard
-import lolirofle.gl2dlib.data.Horizontal
-import lolirofle.gl2dlib.data.Direction
+import lolirofle.data.Horizontal
+import lolirofle.data.Direction
 import scala.collection.mutable.Buffer
-import lolirofle.gl2dlib.GameHandler
+import lolirofle.GameHandler
 import fridefors_peng.linearpg.console.Console
 import fridefors_peng.linearpg.objects.Updatable
 import fridefors_peng.linearpg.timing.Alarm
-import lolirofle.gl2dlib.gl.GLDraw
+import lolirofle.gl2d.GLDraw
 import fridefors_peng.linearpg.camera._
 
 class LineARPGame() extends Game with InputRelated{
@@ -70,9 +70,7 @@ class LineARPGame() extends Game with InputRelated{
 	}
 
 	override def onRender{
-		GLDraw.offset_=(-camera.x(Main.WIDTH),-camera.y((Main.HEIGHT)))
-			Renderable.list.foreach(_.draw())
-		GLDraw.offset_=(camera.x(Main.WIDTH),camera.y(Main.HEIGHT))
+		camera.render(()=>Renderable.list.foreach(_.draw()))
 		
 		GUIRenderable.list.foreach(_.draw())
 		

@@ -1,9 +1,9 @@
 package fridefors_peng.linearpg.terrain
 
 import fridefors_peng.linearpg.Main
-import lolirofle.gl2dlib.data.Vector
-import lolirofle.gl2dlib.geom.Polygon
-import lolirofle.gl2dlib.data.Position
+import lolirofle.data.Vector
+import lolirofle.geom.Polygon
+import lolirofle.data.Position
 
 class TriangleBlock(pos:Position, len:Int, height:Int)
 		extends Terrain(pos,Polygon(List(

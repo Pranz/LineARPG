@@ -1,7 +1,7 @@
 package fridefors_peng.linearpg
-import lolirofle.gl2dlib.graphics.text.DefaultFont
-import lolirofle.gl2dlib.Game
-import lolirofle.gl2dlib.GameHandler
+import lolirofle.graphics2d.text.DefaultFont
+import lolirofle.Game
+import lolirofle.GameHandler
 
 object Main{
 	val TILE_SIZE = 16

@@ -1,8 +1,8 @@
 package fridefors_peng.linearpg.terrain
 
-import lolirofle.gl2dlib.data.Vector
+import lolirofle.data.Vector
 import fridefors_peng.linearpg.objects.Matter
-import lolirofle.gl2dlib.data.Position
+import lolirofle.data.Position
 
 /**
  * Any block who has physical properties, like velocity.

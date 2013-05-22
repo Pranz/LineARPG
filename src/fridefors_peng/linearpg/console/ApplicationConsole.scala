@@ -3,35 +3,21 @@ package fridefors_peng.linearpg.console
 import fridefors_peng.linearpg.objects.GUIRenderable
 import collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
-import lolirofle.gl2dlib.gl.GLDraw
-import lolirofle.gl2dlib.graphics.Color
+import lolirofle.gl2d.GLDraw
+import lolirofle.graphics2d.Color
 import java.io.OutputStream
 import scala.collection.mutable.Queue
 import fridefors_peng.linearpg.input._
-import fridefors_peng.linearpg.console.applications.{Application,IOHandlerApplication}
+import fridefors_peng.linearpg.console.applications.{DefaultShellIOHandlerProcess}
 import org.lwjgl.input.Keyboard
-import lolirofle.gl2dlib.util.MiscUtil
-import lolirofle.gl2dlib.GameHandler
-import lolirofle.gl2dlib.util.NumUtil
-import lolirofle.gl2dlib.geom.Rectangle
-import lolirofle.gl2dlib.data.Position
-import fridefors_peng.linearpg.console.applications.Applications
+import lolirofle.util.MiscUtil
+import lolirofle.GameHandler
+import lolirofle.util.NumUtil
+import lolirofle.geom.Rectangle
+import lolirofle.data.Position
 
 class ApplicationConsole extends GUIRenderable with Control{
-	var app:Application=new IOHandlerApplication(){
-		var shouldClose=false
-		
-		override def onInit(args:Seq[String]){}
-		
-		override def input(in:String){ 
-			val(command :: args)=in.toString.split(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)").toList
-			Applications.list.get(command) match{
-				case Some(app)=>
-					app.start().main(this,args)
-				case None=>{}
-			}
-		}
-	}
+	var process:Process=new DefaultShellIOHandlerProcess()
 	
 	/**
 	 * The maximum amount of visible lines
@@ -39,7 +25,7 @@ class ApplicationConsole extends GUIRenderable with Control{
 	var maxVisibleLines=12
 
 	override def draw(){
-		val lines=app.output(maxVisibleLines)
+		val lines=process.output(maxVisibleLines)
 		val linesCount=lines.length
 
 		//TODO: Reworking with the positioning. At the moment y is the bottom of output but above input
@@ -65,30 +51,30 @@ class ApplicationConsole extends GUIRenderable with Control{
 	}
 	
 	override def onKeyChar(char:Char){
-		app.onChar(char)
+		process.onChar(char)
 	}
 	
 	override def onKeyPressed(input:InputRelated,key:Int){
 		if(key==Keyboard.KEY_C){//TODO: Shift+Insert
 			if(input.keyIsDown(Keyboard.KEY_LCONTROL))
-				app.onFunc(ConsoleFunction.CLIPBOARD_COPY)
+				process.onFunc(ConsoleFunction.CLIPBOARD_COPY)
 		}
 		else if(key==Keyboard.KEY_V){
 			if(input.keyIsDown(Keyboard.KEY_LCONTROL))
-				app.onFunc(ConsoleFunction.CLIPBOARD_PASTE)
+				process.onFunc(ConsoleFunction.CLIPBOARD_PASTE)
 		}
 		else if(key==Keyboard.KEY_LEFT)
-			app.onFunc(ConsoleFunction.GOTO_LEFT)
+			process.onFunc(ConsoleFunction.GOTO_LEFT)
 		else if(key==Keyboard.KEY_RIGHT)
-			app.onFunc(ConsoleFunction.GOTO_RIGHT)
+			process.onFunc(ConsoleFunction.GOTO_RIGHT)
 		else if(key==Keyboard.KEY_UP)
-			app.onFunc(ConsoleFunction.GOTO_PREVIOUS)
+			process.onFunc(ConsoleFunction.GOTO_PREVIOUS)
 		else if(key==Keyboard.KEY_DOWN)
-			app.onFunc(ConsoleFunction.GOTO_NEXT)
+			process.onFunc(ConsoleFunction.GOTO_NEXT)
 		else if(key==Keyboard.KEY_HOME)
-			app.onFunc(ConsoleFunction.GOTO_START)
+			process.onFunc(ConsoleFunction.GOTO_START)
 		else if(key==Keyboard.KEY_END)
-			app.onFunc(ConsoleFunction.GOTO_END)
+			process.onFunc(ConsoleFunction.GOTO_END)
 	}
 }
 

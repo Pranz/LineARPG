@@ -1,8 +1,8 @@
 package fridefors_peng.linearpg.objects
 
-import lolirofle.gl2dlib.data.Vector
-import lolirofle.gl2dlib.geom.Shape
-import lolirofle.gl2dlib.data.Position
+import lolirofle.data.Vector
+import lolirofle.geom.Shape
+import lolirofle.data.Position
 
 class TestObject(pos:Position,body:Shape) extends Interactable(pos,body) with Renderable with Matter{
 	override val gravity=0f

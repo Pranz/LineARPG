@@ -2,13 +2,13 @@ package fridefors_peng.linearpg.objects.entities
 
 import fridefors_peng.linearpg.objects.{Matter, Interactable, Renderable}
 import fridefors_peng.linearpg.objects.entities.actions.Action
-import lolirofle.gl2dlib.data.Vector
-import lolirofle.gl2dlib.geom.Shape
+import lolirofle.data.Vector
+import lolirofle.geom.Shape
 import collection.mutable.ArrayBuffer
-import lolirofle.gl2dlib.data.Horizontal
-import lolirofle.gl2dlib.data.Direction
-import lolirofle.gl2dlib.data.Position
-import lolirofle.gl2dlib.data.NullVector
+import lolirofle.data.Horizontal
+import lolirofle.data.Direction
+import lolirofle.data.Position
+import lolirofle.data.NullVector
 
 /**
  * The Entity class. This is any unit in the game world, and can be player or AI controlled.
@@ -51,6 +51,7 @@ abstract class Entity(pos:Position,body:Shape) extends Interactable(pos,body) wi
 	
 	def stand(){
 		isRunning=false
+		movingDir = Direction.Center
 	}
 	
 	def jump(){
@@ -62,7 +63,7 @@ abstract class Entity(pos:Position,body:Shape) extends Interactable(pos,body) wi
 		if(isRunning){
 			val forceNew=force+(if(onGround)runningForce else runningForce*airSpeedFactor)*movingDir.toByte
 			
-			if(velocity.x*movingDir<maxhSpeed)
+			if(Math.abs(velocity.x)<maxhSpeed)
 				force=forceNew
 		}
 		super.update(delta)

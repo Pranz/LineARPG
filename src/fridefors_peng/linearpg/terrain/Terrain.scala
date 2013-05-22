@@ -1,9 +1,9 @@
 package fridefors_peng.linearpg.terrain
 
 import fridefors_peng.linearpg.objects.{Interactable, Renderable}
-import lolirofle.gl2dlib.data.Vector
-import lolirofle.gl2dlib.geom.Shape
-import lolirofle.gl2dlib.data.Position
+import lolirofle.data.Vector
+import lolirofle.geom.Shape
+import lolirofle.data.Position
 
 /**
  * Any solid Interactive object.

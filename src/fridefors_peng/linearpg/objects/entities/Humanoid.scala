@@ -1,12 +1,12 @@
 package fridefors_peng.linearpg.objects.entities
 
-import lolirofle.gl2dlib.geom.Rectangle
-import lolirofle.gl2dlib.data.Vector
+import lolirofle.geom.Rectangle
+import lolirofle.data.Vector
 import fridefors_peng.linearpg.objects.entities.actions.{
 	TestAction, TestChargedAction, SwordAction
 }
-import lolirofle.gl2dlib.gl.GLDraw
-import lolirofle.gl2dlib.data.Position
+import lolirofle.gl2d.GLDraw
+import lolirofle.data.Position
 
 class Humanoid(pos:Position) extends Entity(pos,Rectangle(24,56)){	
 	override val jumpForce = Vector(0,0.38f)

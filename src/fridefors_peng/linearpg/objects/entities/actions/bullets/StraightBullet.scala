@@ -2,11 +2,11 @@ package fridefors_peng.linearpg.objects.entities.actions.bullets
 
 import fridefors_peng.linearpg.objects.{Interactable, Matter, Renderable}
 import fridefors_peng.linearpg.objects.entities.Entity
-import lolirofle.gl2dlib.data.{Vector, NullVector}
+import lolirofle.data.{Vector, NullVector}
 import fridefors_peng.linearpg.terrain.Terrain
-import lolirofle.gl2dlib.geom.Circle
+import lolirofle.geom.Circle
 import fridefors_peng.linearpg.timing.Alarm
-import lolirofle.gl2dlib.data.Position
+import lolirofle.data.Position
 
 class StraightBullet(pos:Position, speed:Float, ent:Entity) extends Bullet(pos,Circle(2),ent) {
 	force = Vector(speed * ent.facingDir, 0)
