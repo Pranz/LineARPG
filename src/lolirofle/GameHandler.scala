@@ -155,6 +155,7 @@ object GameHandler{
 	def FPS_=(fps:Int){
 		System.out.println("Sets Target FPS: "+fps);
 		targetFPS=fps;
+		Display.sync(fps);
 	}
 	
 	def keyIsDown(key:Int)=Keyboard.isKeyDown(key);

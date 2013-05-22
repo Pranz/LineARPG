@@ -24,4 +24,7 @@ trait Game{
 	
 	def FPS=GameHandler.FPS
 	def FPS_=(fps:Int){GameHandler.FPS=fps;}
+	
+	def windowWidth=Display.getWidth
+	def windowHeight=Display.getHeight
 }

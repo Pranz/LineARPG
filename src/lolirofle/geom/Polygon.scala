@@ -9,7 +9,7 @@ object Polygon{
 	def apply(points:Seq[Position])=new Polygon{
 		override def sides=vertices.size
 		var vertices=points
-		override val width=0f//TODO: 
+		override val width=0f//TODO: Implementation of methods in Polygons
 		override val height=0f
 		override val perimeter=0f
 		override val area=0f
@@ -25,7 +25,7 @@ trait Polygon extends Shape{
 	def draw(x:Float,y:Float,filled:Boolean){
 		(if(filled)GLGeom.QUADS else GLGeom.LINE_LOOP).draw{
 			vertices.foreach(p=>{
-				GL11.glVertex3f(p.x,p.y,0);//TODO: Use GLDraw functions, make one
+				GL11.glVertex3f(p.x,p.y,0);//TODO: Use GLDraw functions, make one. GLDraw.drawPolygon
 			});
 		};
 	}

@@ -76,7 +76,7 @@ trait Matter extends Interactable{
 	 * 
 	 * The amount of force per update 
 	 */
-	var force:Vector=NullVector//TODO: Need a forcePerUpdate and a forcePerMs
+	var force:Vector=NullVector//TODO: Need a forcePerUpdate (e.g. when moving each update) and a forcePerMs (e.g. when jumping) for accurate delta timing
 	
 	var relativeObject:Option[Matter] = None
 	var prvRelativeObject:Option[Matter] = None

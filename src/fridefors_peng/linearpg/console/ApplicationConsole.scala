@@ -2,7 +2,6 @@ package fridefors_peng.linearpg.console
 
 import fridefors_peng.linearpg.objects.GUIRenderable
 import collection.mutable.ArrayBuffer
-import scala.collection.JavaConversions._
 import lolirofle.gl2d.GLDraw
 import lolirofle.graphics2d.Color
 import java.io.OutputStream
@@ -24,13 +23,13 @@ class ApplicationConsole extends GUIRenderable with Control{
 	 */
 	var maxVisibleLines=12
 
-	override def draw(){
+	override def draw(windowWidth:Float,windowHeight:Float){
 		val lines=process.output(maxVisibleLines)
 		val linesCount=lines.length
 
 		//TODO: Reworking with the positioning. At the moment y is the bottom of output but above input
 		val x=16
-		val y=640//TODO: General way to get height of window instead of constant (640), maybe through parameters in draw. A display
+		val y=windowHeight
 		val x2=x+256
 		val y2=y-GLDraw.font.lineHeight*maxVisibleLines
 		

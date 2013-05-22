@@ -10,9 +10,9 @@ case class SimpleInteractableStalkerCamera(val target:Interactable) extends Came
 	override def x(viewWidth:Float)=target.position.x+targetMidpoint.x-viewWidth*0.5f
 	override def y(viewHeight:Float)=target.position.y+targetMidpoint.y-viewHeight*0.5f
 	
-	override def render(renderFunc:()=>Unit){
-		GLDraw.offset_=(-x(Main.WIDTH),-y((Main.HEIGHT)))
+	override def render(renderFunc:()=>Unit,windowWidth:Float,windowHeight:Float){
+		GLDraw.offset_=(-x(windowWidth),-y(windowHeight))
 			renderFunc()
-		GLDraw.offset_=(x(Main.WIDTH),y(Main.HEIGHT))
+		GLDraw.offset_=(x(windowWidth),y(windowHeight))
 	}
 }

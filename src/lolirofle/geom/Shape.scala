@@ -11,10 +11,10 @@ trait Shape extends Drawable{
 	def midpoint:Position
 	
 	//When rotation and flipping are accepted
-	def isCongruent(p:Polygon){}//TODO
+	def isCongruent(p:Polygon){}//TODO: Implement isCongruent, isSimiliar, resized, rotated, flipped
 	
 	//When rotation, flipping and resizing are accepted
-	def isSimiliar(p:Polygon){}//TODO
+	def isSimiliar(p:Polygon){}
 	
 	def isResized(p:Polygon){}
 	def isRotated(p:Polygon){}

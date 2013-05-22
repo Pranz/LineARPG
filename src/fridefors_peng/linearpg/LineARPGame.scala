@@ -70,9 +70,9 @@ class LineARPGame() extends Game with InputRelated{
 	}
 
 	override def onRender{
-		camera.render(()=>Renderable.list.foreach(_.draw()))
+		camera.render(()=>Renderable.list.foreach(_.draw()),windowWidth,windowHeight)
 		
-		GUIRenderable.list.foreach(_.draw())
+		GUIRenderable.list.foreach(_.draw(windowWidth,windowHeight))
 		
 		Main.drawStrings(4,4,debugList)
 	}
@@ -115,7 +115,7 @@ class LineARPGame() extends Game with InputRelated{
 		shouldExit=true
 	}
 	
-	override def reset(){//TODO: All the global lists containing objects won't reset 
+	override def reset(){//TODO: All the global lists containing objects won't reset in a restart
 		Main.restart=true;
 		close();
 	}

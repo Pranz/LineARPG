@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import java.nio.ByteBuffer;
 import org.lwjgl.BufferUtils;
 
-object MiscUtil{//TODO: Rename "MiscUtil" and "NumUtil" to "Misc" and "Num"
+object MiscUtil{
 	def getExecutionTimeOf(code: =>Unit,times:Int=1):Long={
 		val startTime=System.nanoTime();
 		var i=0;

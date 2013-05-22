@@ -3,7 +3,7 @@ package lolirofle.geom
 import lolirofle.data.Position
 import lolirofle.gl2d.GLDraw
 
-case object Point extends RegularPolygon{//TODO: Zero-dimensional? Line to be one-dimension?
+case object Point extends RegularPolygon{
 	override val sides=1
 	override val side=1f
 	override val width=1f

@@ -73,12 +73,12 @@ class Console extends GUIRenderable with Updatable with Control{
 			("echo", "echoes every argument on a seperate line", _.foreach{(str) => lines.enqueue(str)})
 		)
 
-	override def draw(){
+	override def draw(windowWidth:Float,windowHeight:Float){
 		val linesCount=lines.length
 
 		//TODO: Reworking with the positioning. At the moment y is the bottom of output but above input
 		val x=16
-		val y=640//TODO: General way to get height of window instead of constant (640), maybe through parameters in draw. A display
+		val y=windowHeight-100
 		val x2=x+256
 		val y2=y-GLDraw.font.lineHeight*maxVisibleLines
 		

@@ -6,10 +6,7 @@ import lolirofle.GameHandler
 object Main{
 	val TILE_SIZE = 16
 	var game:Game=null
-	
-	val WIDTH=1024//TODO: Better way of doing this
-	val HEIGHT=756
-	
+
 	var restart=false;
 	
 	def main(args:Array[String]){
@@ -18,7 +15,7 @@ object Main{
 			
 			game=new LineARPGame()
 			
-			GameHandler.init(game,"Test",displayWidth=WIDTH,displayHeight=HEIGHT);
+			GameHandler.init(game,"Test",displayWidth=1024,displayHeight=756);
 			GameHandler.start();
 		}while(restart);
 	}
