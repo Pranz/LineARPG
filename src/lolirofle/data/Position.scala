@@ -7,5 +7,7 @@ case class Position(val x:Float,val y:Float){
 	def distanceTo(other:Position)=math.hypot(other.x-this.x,other.y-this.y)
 	def rightBelow = Position(x, y+1)
 	final def toTuple = (x,y)
+	def withX(x:Float)=Position(x,y)
+	def withY(y:Float)=Position(x,y)
 	override def toString="Position("+x.toString+','+y.toString+')'
 }

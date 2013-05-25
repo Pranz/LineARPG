@@ -4,20 +4,20 @@ import scala.collection.mutable.HashMap
 import fridefors_peng.linearpg.console.applications._
 import lolirofle.util.NumUtil
 
-abstract class Application(name:String){
+abstract class Application(val name:String){
 	Application.list+=((name,Application.this))
 	
 	/**
 	 * Help text for the application
 	 * 
-	 * @returns Help text
+	 * @return Help text
 	 */
 	def help:String
 	
 	/**
 	 * Starts the application
 	 * 
-	 * @returns Application process
+	 * @return Application process
 	 */
 	def start():IOExecutable
 }
@@ -77,6 +77,29 @@ object Application{
 					}
 					case _=>out.writeln(help)
 				}
+			}
+		}
+	}
+	
+	new Application("help"){
+		override val help="A help page for commands\n\nSyntax: help <str>"//TODO: Fix newline bug
+		
+		override def start()=new IOExecutable{
+			override def main(args:Seq[String],in:InputHandler,out:OutputHandler){
+				if(args.size==0)
+					Application.list.foreach{
+						case (name,app)=>{
+							out.writeln("  "+name)
+						}
+					}
+				else if(args.size==1)
+					Application.list.get(args(0)) match{
+						case Some(app)=>{
+							out.writeln("Help page for '"+app.name+'\'')
+							out.writeln(app.help)
+						}
+						case None=>out.writeln("No help page for command: '"+args(0)+'\'')
+					}
 			}
 		}
 	}

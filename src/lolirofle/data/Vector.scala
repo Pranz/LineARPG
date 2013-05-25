@@ -15,16 +15,16 @@ trait Vector{
 	
 	final def toTuple = (x,y)
 	
-	def withLength(len:Double):this.type
-	def withDirection(angle:Double):this.type
-	def withX(x:Float):this.type
-	def withY(y:Float):this.type
+	def withLength(len:Double):Vector
+	def withDirection(angle:Double):Vector
+	def withX(x:Float):Vector
+	def withY(y:Float):Vector
 	
-	def +(v:Vector):this.type
-	def -(v:Vector):this.type
-	def *(n:Float):this.type
-	def /(n:Float):this.type
-	def unary_- :this.type
+	def +(v:Vector):Vector
+	def -(v:Vector):Vector
+	def *(n:Float):Vector
+	def /(n:Float):Vector
+	def unary_- :Vector
 	
 	override def toString = "Vector("+x.toString+','+y.toString+')'
 }
@@ -36,22 +36,22 @@ case class PositionalVector(override val x:Float,override val y:Float) extends V
 	override lazy val length=if(x==0)Math.abs(y) else if(y==0)Math.abs(x) else math.hypot(x,y)
 	override lazy val direction=math.atan2(x,y)
 	
-	override def +(v:Vector)= PositionalVector(x+v.x,y+v.y).asInstanceOf[this.type]
-	override def -(v:Vector)= PositionalVector(x-v.x,y-v.y).asInstanceOf[this.type]
-	override def *(n:Float) = PositionalVector(x*n,y*n).asInstanceOf[this.type]
-	override def /(n:Float) = PositionalVector(x/n,y/n).asInstanceOf[this.type]
-	override def unary_- :this.type = PositionalVector(-x,-y).asInstanceOf[this.type]
+	override def +(v:Vector)= PositionalVector(x+v.x,y+v.y)
+	override def -(v:Vector)= PositionalVector(x-v.x,y-v.y)
+	override def *(n:Float) = PositionalVector(x*n,y*n)
+	override def /(n:Float) = PositionalVector(x/n,y/n)
+	override def unary_- :Vector = PositionalVector(-x,-y)
 	
-	override def withX(x:Float)=PositionalVector(x,y).asInstanceOf[this.type]
-	override def withY(y:Float)=PositionalVector(x,y).asInstanceOf[this.type]
-	override def withLength(len:Double):this.type=
+	override def withX(x:Float)=PositionalVector(x,y)
+	override def withY(y:Float)=PositionalVector(x,y)
+	override def withLength(len:Double):Vector=
 		if(len==0)
-			NullVector.asInstanceOf[this.type]
+			NullVector
 		else
-			PositionalVector((len*math.sin(direction)).toFloat,(len*math.cos(direction)).toFloat).asInstanceOf[this.type]
+			PositionalVector((len*math.sin(direction)).toFloat,(len*math.cos(direction)).toFloat)
 
-	override def withDirection(angle:Double):this.type=
-		PositionalVector((x*math.cos(angle)-y*math.sin(angle)).toFloat,(x*math.sin(angle)+y*math.cos(angle)).toFloat).asInstanceOf[this.type]
+	override def withDirection(angle:Double):Vector=
+		PositionalVector((x*math.cos(angle)-y*math.sin(angle)).toFloat,(x*math.sin(angle)+y*math.cos(angle)).toFloat)
 	
 	def asBiggerRatio=
 		if(x==0||y==0)
@@ -78,16 +78,16 @@ case class PolarVector(override val direction:Double,override val length:Double)
 	override lazy val x=(length*math.sin(direction)).toFloat
  	override lazy val y=(length*math.cos(direction)).toFloat
 	
-	override def +(v:Vector)= PolarVector(x+v.x,y+v.y).asInstanceOf[this.type]
-	override def -(v:Vector)= PolarVector(x-v.x,y-v.y).asInstanceOf[this.type]
-	override def *(n:Float) = PolarVector(direction,length*n).asInstanceOf[this.type]
-	override def /(n:Float) = PolarVector(direction,length/n).asInstanceOf[this.type]
-	override def unary_- :this.type = PolarVector(direction,-length).asInstanceOf[this.type]
+	override def +(v:Vector)= PolarVector(x+v.x,y+v.y)
+	override def -(v:Vector)= PolarVector(x-v.x,y-v.y)
+	override def *(n:Float) = PolarVector(direction,length*n)
+	override def /(n:Float) = PolarVector(direction,length/n)
+	override def unary_- :Vector = PolarVector(direction,-length)
 	
-	override def withLength(length:Double):this.type=PolarVector(direction,length).asInstanceOf[this.type]
-	override def withDirection(direction:Double):this.type=PolarVector(direction,length).asInstanceOf[this.type]
-	override def withX(x:Float)=PolarVector(math.atan2(x,y),math.hypot(x,y)).asInstanceOf[this.type]
-	override def withY(y:Float)=PolarVector(math.atan2(x,y),math.hypot(x,y)).asInstanceOf[this.type]
+	override def withLength(length:Double):Vector=PolarVector(direction,length)
+	override def withDirection(direction:Double):Vector=PolarVector(direction,length)
+	override def withX(x:Float)=PolarVector(math.atan2(x,y),math.hypot(x,y))
+	override def withY(y:Float)=PolarVector(math.atan2(x,y),math.hypot(x,y))
 }
 
 object NullVector extends PositionalVector(0,0){

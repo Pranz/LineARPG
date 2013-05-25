@@ -15,6 +15,11 @@ import lolirofle.util.NumUtil
 import lolirofle.geom.Rectangle
 import lolirofle.data.Position
 
+/**
+ * ApplicationConsole
+ * 
+ * A Console/Terminal that runs Applications
+ */
 class ApplicationConsole extends GUIRenderable with Control{
 	var process:Process=new DefaultShellIOHandlerProcess()
 	
@@ -26,26 +31,30 @@ class ApplicationConsole extends GUIRenderable with Control{
 	override def draw(windowWidth:Float,windowHeight:Float){
 		val lines=process.output(maxVisibleLines)
 		val linesCount=lines.length
-
-		//TODO: Reworking with the positioning. At the moment y is the bottom of output but above input
-		val x=16
-		val y=windowHeight
-		val x2=x+256
-		val y2=y-GLDraw.font.lineHeight*maxVisibleLines
+		
+		val margin=8
+		val padding=4
+		
+		val x=margin
+		val h=GLDraw.font.lineHeight*maxVisibleLines
+		val y=windowHeight-h-margin
+		val w=256
 		
 		//Background
 		GLDraw.color=Color(32,32,32,64)
-		GLDraw.drawRectangle(x,y,x2,y2,true)
+		GLDraw.drawRectangle(x,y-padding*2,x+w+padding,y+h,true)
 		
 		//Background Border
 		GLDraw.color=Color(64,64,64,64)
-		GLDraw.drawRectangle(x,y,x2,y2)
+		GLDraw.drawRectangle(x,y-padding*2,x+w+padding,y+h)
 		
 		GLDraw.color=Color.WHITE
-		
+
 		//Text
-		lines.takeRight(maxVisibleLines).zipWithIndex.foreach{case(line,i) => {
-			GLDraw.font.drawString(x+4,y+4+GLDraw.font.lineHeight*(i-math.min(maxVisibleLines,linesCount)),line)
+		lines.takeRight(maxVisibleLines).foldRight(0f){(line,yAdvance) => {
+			val yAdv=yAdvance-GLDraw.font.heightOf(line)
+			GLDraw.font.drawString(x+padding,y+h-padding+yAdv,line)
+			yAdv
 		}}
 	}
 	
@@ -74,12 +83,16 @@ class ApplicationConsole extends GUIRenderable with Control{
 			process.onFunc(ConsoleFunction.GOTO_START)
 		else if(key==Keyboard.KEY_END)
 			process.onFunc(ConsoleFunction.GOTO_END)
+		else if(key==Keyboard.KEY_DELETE)
+			process.onFunc(ConsoleFunction.DELETE_FRONT)
+		else if(key==Keyboard.KEY_BACK)
+			process.onFunc(ConsoleFunction.DELETE_REAR)
 	}
 }
 
 object ConsoleFunction extends Enumeration{
 	val
-		DELETE_BACK,
+		DELETE_REAR,
 		DELETE_FRONT,
 		CLIPBOARD_COPY,
 		CLIPBOARD_PASTE,

@@ -9,7 +9,7 @@ object Main{
 
 	var restart=false;
 	
-	def main(args:Array[String]){
+	def main(args:Array[String]){		
 		do{
 			restart=false;
 			

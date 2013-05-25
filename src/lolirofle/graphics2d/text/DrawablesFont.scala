@@ -4,21 +4,18 @@ import scala.collection.mutable.HashMap
 import org.lwjgl.opengl.GL11
 import scala.collection.immutable.IntMap
 import lolirofle.graphics2d.text.chardata.FontChar
-import lolirofle.data.Position
+import lolirofle.data.{Position,Vector}
 
 object DrawableObjectFont{
-	val MAX_RENDER_CACHE_SIZE=200;
 	val defaultRenderCacheSize=200;
 }
 
 /**
- * Makes a cachable font out of Drawable objects.
+ * A cachable font made of Drawable objects.
  * 
  * @author Lolirofle
- *
- * @param <T> Defines which Drawable class the LetterChars is, if multiple Drawable classes are needed for the LetterChars, then put T as ?.
  */
-class DrawablesFont(override val name:String,override val size:Short,override val lineHeight:Int,val chars:IntMap[FontChar],val useDisplayListCache:Boolean=true) extends Font{
+class DrawablesFont(override val name:String,override val size:Short,override val lineHeight:Int,val chars:IntMap[FontChar],val useDisplayListCache:Boolean=true) extends Font with FormattableFont{
 	protected var caches:HashMap[String,(Int,Position)]=null;//TODO: Cache is limited to normal drawString because there's no indication of any difference between different renders in storage, only which string it is. Maybe it should stay this way and implement a e.g. "withColor" or "withFormatting" trait that creates new fonts for fonts to use 
 	var cacheIdStart:Int=0;
 	var cacheIdCounter=0;
@@ -47,64 +44,100 @@ class DrawablesFont(override val name:String,override val size:Short,override va
 						GL11.glCallList(cache);//Draw cached render
 					
 					case None=>
-						cacheRender(str,true)
+						cacheString(str,true)
 				}
 			}
 			else
-				renderDrawableString(str,{_.draw(_,_,size)});
+				drawStringRaw(str);
 		GL11.glTranslatef(-x,-y,0);
 	}
 	
 	/**
-	 * Renders the string str
+	 * Renders a character
+	 * 
+	 * @param chr Character to render
+	 * @return Width and height of the rendered character
+	 */
+	def drawCharacter(pos:Position,chr:Char):Vector={
+		val chrData:FontChar=
+			if(chr<0)
+				chars(0);
+			else
+				chars.getOrElse(chr.toInt,chars(0));
+		
+		chrData.draw(pos.x,pos.y,size)
+		
+		return Vector(chrData.xAdvance,chrData.yAdvance)
+	}
+	
+	/**
+	 * Renders a string without caching
 	 * 
 	 * @param str String to render
-	 * @returns Width and height of the rendered string
+	 * @return Width and height of the rendered string
 	 */
-	private def renderDrawableString(str:String,func:(FontChar,Float,Float)=>Unit):Position={
-		var xAdvanced=0;
-		var yAdvanced=0;
+	protected def drawStringRaw(str:String,drawCharFunc:(Char,Position)=>Position=(chr,advanced)=>
+			if(chr=='\n')
+				Position(0,advanced.y+lineHeight);
+			else
+				advanced+drawCharacter(advanced,chr)
+	):Position={
+		var advanced=Position(0,0);
+		var maxAdvanced=advanced
 		
-		str.foreach(chr=>{			
-			if(chr=='\n'){
-				xAdvanced=0;
-				yAdvanced+=lineHeight;
-			}
-			else{
-				val chrData:FontChar={
-						if(chr<0)
-							chars(0);
-						else
-							chars.getOrElse(chr.toInt,chars(0));
-				}
-				
-				func(chrData,xAdvanced,yAdvanced)
-				xAdvanced+=chrData.xAdvance;
-			}
+		str.foreach(chr=>{
+			advanced=drawCharFunc(chr,advanced)
+			
+			if(advanced.x>maxAdvanced.x)maxAdvanced=maxAdvanced.withX(advanced.x)
+			if(advanced.y>maxAdvanced.y)maxAdvanced=maxAdvanced.withY(advanced.y)
 		});
-		return Position(xAdvanced,yAdvanced)
+		return maxAdvanced.withY(maxAdvanced.y+lineHeight)
 	}
 
-	protected def cacheRender(str:String,execute:Boolean,renderFunc:(FontChar,Float,Float)=>Unit={_.draw(_,_,size)}):Position={
+	override def drawStringFormatted(x:Float,y:Float,str:String,formattingFunc:Char=>Boolean){
+		GL11.glTranslatef(x,y,0);
+			drawStringRaw(str,(chr,advanced)=>{
+				if(formattingFunc(chr)){
+					if(chr=='\n')
+						Position(0,advanced.y+lineHeight);
+					else
+						advanced+drawCharacter(advanced,chr)
+				}
+				else
+					advanced
+			});
+		GL11.glTranslatef(-x,-y,0);
+	}
+	
+	/**
+	 * Caches the string str
+	 * 
+	 * @param str String to render and cache
+	 * @param execute If the string should be rendered as it is cached
+	 * @return Width and height of the rendered string
+	 */
+	protected def cacheString(str:String,execute:Boolean):Position={
 		GL11.glNewList(cacheIdStart+cacheIdCounter,if(execute)GL11.GL_COMPILE_AND_EXECUTE else GL11.GL_COMPILE);
-			val advanced=renderDrawableString(str,renderFunc)
+			val advanced=drawStringRaw(str)
 		GL11.glEndList();
-			
 		caches.put(str,(cacheIdStart+cacheIdCounter,advanced))
 		cacheIdCounter+=1
 		
 		return advanced
 	}
-	
-	override def getCharsAllocated()=chars.size;
-	
-	override def widthOf(str:String):Float=caches.get(str) match{
-		case Some((cache,advanced))=>advanced.x
-		case None=>cacheRender(str,false).x
-	}
+				
+	override def dimensionOf(str:String):Position=
+		if(useDisplayListCache){
+			initDisplayCache();
+		
+			caches.get(str) match{
+				case Some((cache,advanced))=>advanced
+				case None=>cacheString(str,false)
+			}
+		}
+		else
+			cacheString(str,false)
 
-	override def heightOf(str:String):Float=caches.get(str) match{
-		case Some((cache,advanced))=>advanced.y
-		case None=>cacheRender(str,false).y
-	}
+	override def widthOf(str:String):Float=dimensionOf(str).x
+	override def heightOf(str:String):Float=dimensionOf(str).y
 }

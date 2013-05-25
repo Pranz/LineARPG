@@ -21,5 +21,5 @@ trait OutputHandler{
 
 trait InputHandler{
 	def readLine():String
-	//def readWait //TODO: Should we have a readWait? 
+	//def readLineWait //TODO: Should we have a readLineWait where it waits for input to be entered? 
 }
